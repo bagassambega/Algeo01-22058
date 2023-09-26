@@ -1,7 +1,10 @@
 package matrix;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.io.*;
 import java.lang.*;
@@ -34,15 +37,15 @@ public class Matrix {
     public void readMatrixFile(String filename) {
         try (FileReader fileInput = new FileReader(filename)) {
             BufferedReader bufferedReader = new BufferedReader(fileInput);
-            StringBuilder line;
-            while (bufferedReader.readLine() != null) {
-                line = new StringBuilder(bufferedReader.readLine());
-                String[] lineArray = line.toString().split(" ");
+            int row = 0;
+            String line;
+            while ( (line = bufferedReader.readLine()) != null) {
+                String[] lineArray = line.split(" ");
                 for (int i = 0; i < lineArray.length; i++) {
-                    this.matrix[this.row][i] = Double.parseDouble(lineArray[i]);
+                    this.matrix[row][i] = Double.parseDouble(lineArray[i]);
                 }
-//                this.row++;
-
+//                System.out.println(row);
+                row++;
             }
         }
         catch (IOException e) {
@@ -50,15 +53,19 @@ public class Matrix {
         }
     }
 
-    public void printMatrixCLI() {
+    public void printMatrix() {
         System.out.print("[");
         for (int i = 0; i < this.row; i++) {
-            System.out.print(Arrays.toString(this.matrix[i]));
+            System.out.print("[");
+            for (int j = 0; j < this.col; j++) {
+                System.out.print(this.matrix[i][j]);
+                if (j != this.col - 1) {
+                    System.out.print(", ");
+                }
+            }
+            System.out.print("]");
             if (i != this.row - 1) {
                 System.out.print(",\n");
-            }
-            else {
-                System.out.print("\n");
             }
         }
         System.out.println("]");
@@ -69,7 +76,24 @@ public class Matrix {
     }
 
     public boolean isForSPLValid() {
-        return this.row == this.col - 1;
+        return this.row >= (this.col - 1);
     }
+
+    public void roundElmtMatrix() {
+        for (int i = 0; i < this.row; i++) {
+            for (int j = 0; j < this.col - 1; j++) {
+                BigDecimal.valueOf(this.matrix[i][j]).setScale(2, RoundingMode.HALF_UP);
+            }
+        }
+    }
+
+//    public boolean checkUpperMatrix() {
+//        for (int i = 0; i < this.row; i++) {
+//            for (int j = 0; j < this.col; j++) {
+//
+//            }
+//        }
+//    }
+
 
 }
