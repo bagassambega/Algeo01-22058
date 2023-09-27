@@ -1,13 +1,10 @@
 package matrix;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.text.DecimalFormat;
+import java.math.*;
 import java.util.*;
 import java.io.*;
 import java.lang.*;
+import java.text.DecimalFormat;
 
 public class Matrix {
     public int row;
@@ -20,6 +17,7 @@ public class Matrix {
         this.col = col;
         this.matrix = new double[this.row][this.col];
     }
+
 
     public double getElmt(int i, int j) {
         return this.matrix[i][j];
@@ -44,14 +42,16 @@ public class Matrix {
                 for (int i = 0; i < lineArray.length; i++) {
                     this.matrix[row][i] = Double.parseDouble(lineArray[i]);
                 }
-//                System.out.println(row);
                 row++;
             }
+            fileInput.close();
+            bufferedReader.close();
         }
         catch (IOException e) {
             System.err.println(e);
         }
     }
+
 
     public void printMatrix() {
         System.out.print("[");
@@ -75,25 +75,18 @@ public class Matrix {
         return this.row == this.col;
     }
 
-    public boolean isForSPLValid() {
-        return this.row >= (this.col - 1);
-    }
-
     public void roundElmtMatrix() {
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.col - 1; j++) {
-                BigDecimal.valueOf(this.matrix[i][j]).setScale(2, RoundingMode.HALF_UP);
+//                BigDecimal bd = BigDecimal.valueOf(this.matrix[i][j]);
+//                BigDecimal round =  bd.setScale(5, RoundingMode.HALF_UP);
+//                this.matrix[i][j] = round.doubleValue();
+                double scale = Math.pow(10, 5);
+                this.matrix[i][j] = Math.round(getElmt(i, j) * scale) / scale;
             }
         }
     }
 
-//    public boolean checkUpperMatrix() {
-//        for (int i = 0; i < this.row; i++) {
-//            for (int j = 0; j < this.col; j++) {
-//
-//            }
-//        }
-//    }
 
 
 }

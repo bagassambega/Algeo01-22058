@@ -25,21 +25,18 @@ public class Main {
                 SPL();
                 break;
             case 2:
-                System.out.println("\n==========Determinan Matriks==========");
-                System.out.println("1. Metode eliminasi Gauss");
+                MainDeterminant();
             case 7:
                 System.out.println("Terima kasih telah menggunakan program ini!");
                 mainLoop = false;
                 break;
             default:
                 System.out.println("Input tidak valid!");
-                break;
-
         }
     }
 
 
-    public static Matrix InputMatrix() {
+    public static Matrix InputMatrix(int choice) {
         Scanner inputMatrix = new Scanner(System.in);
         System.out.print("Masukkan matrix melalui terminal (1) atau file (2)?: ");
         int InputMatrixChoice = inputMatrix.nextInt();
@@ -58,10 +55,27 @@ public class Main {
             case 1:
                 Scanner inputRow = new Scanner(System.in);
                 Scanner inputCol = new Scanner(System.in);
-                System.out.print("Masukkan jumlah baris: ");
-                int row = inputRow.nextInt();
-                System.out.print("Masukkan jumlah kolom: ");
-                int col = inputCol.nextInt();
+                int row, col;
+                if ((choice == 1) || (choice == 4)) {
+                    System.out.print("Masukkan jumlah variabel dalam persamaan: ");
+                    col = inputCol.nextInt();
+                    System.out.print("Masukkan jumlah persamaan: ");
+                    row = inputRow.nextInt();
+                    while (row < col) { // Ada -1 karena
+                        System.out.println("Jumlah persamaan minimal sama dengan jumlah variabel.");
+                        System.out.print("Masukkan jumlah variabel dalam persamaan: ");
+                        col = inputCol.nextInt();
+                        System.out.print("Masukkan jumlah persamaan: ");
+                        row = inputRow.nextInt();
+                    }
+                    col += 1; // Agar bisa memasukkan hasil persamaan
+                }
+                else {
+                    System.out.print("Masukkan banyak kolom matriks: ");
+                    col = inputCol.nextInt();
+                    System.out.print("Masukkan banyak baris matriks: ");
+                    row = inputRow.nextInt();
+                }
                 Matrix matCLI = new Matrix(row, col);
                 matCLI.readMatrixCLI(matCLI.row, matCLI.col);
                 return matCLI;
@@ -69,7 +83,6 @@ public class Main {
                 Scanner inputFilename = new Scanner(System.in);
                 System.out.print("\nMasukkan nama file: ");
                 String filePath = inputFilename.nextLine();
-//                System.out.println(getColFile(filePath, getRowFile(filePath)) + "+" + getRowFile(filePath));
                 Matrix matFile = new Matrix(getRowFile(filePath), getColFile(filePath, getRowFile(filePath)));
                 matFile.printMatrix();
                 matFile.readMatrixFile(filePath);
@@ -88,6 +101,8 @@ public class Main {
             while (bufferedReader.readLine() != null) {
                 row++;
             }
+            fileInput.close();
+            bufferedReader.close();
         } catch (IOException e) {
             System.err.println(e);
         }
@@ -99,6 +114,8 @@ public class Main {
             BufferedReader bufferedReader = new BufferedReader(fileInput);
             StringBuilder line = new StringBuilder(bufferedReader.readLine());
             String[] Arrayline = line.toString().split(" ");
+            fileInput.close();
+            bufferedReader.close();
             return Arrayline.length;
         }
         catch (IOException e) {
@@ -126,9 +143,46 @@ public class Main {
                 break;
             }
         }
-        Matrix matriks = InputMatrix();
-        matriks.printMatrix();
-        SPL.CreateMatrixEselon(matriks);
-        matriks.printMatrix();
+        Matrix matriks = InputMatrix(1);
+        if (SPLchoicenum == 1) {
+            SPL.CreateMatrixEselon(matriks);
+            System.out.println("Bentuk matriks eselon: ");
+            matriks.printMatrix();
+            SPL.solveSPLEchelon(matriks);
+        }
+        else if (SPLchoicenum == 2) {
+            SPL.CreateMatrixEselon(matriks);
+            if (SPL.checkSolveType(matriks) == -1) {
+                System.out.println("Tidak ada solusi yang memenuhi.");
+            }
+            else if (SPL.checkSolveType(matriks) == 1) {
+                SPL.parametricSol(matriks);
+            }
+            else {
+                SPL.CreateMatrixEselonReduced(matriks);
+                System.out.println("Bentuk matriks tereduksi: ");
+                matriks.printMatrix();
+            }
+        }
+    }
+
+    public static void MainDeterminant() {
+        System.out.println("\n==========Determinan Matriks==========");
+        System.out.println("1. Metode kofaktor");
+        System.out.println("2. Metode reduksi baris");
+        Scanner MainDeterminantChoice = new Scanner(System.in);
+        System.out.print("Masukkan pilihan: ");
+        int n = MainDeterminantChoice.nextInt();
+        while (n < 1 || n > 3) {
+            System.out.println("Masukkan input yang valid!");
+            System.out.print("Masukkan pilihan: ");
+            n = MainDeterminantChoice.nextInt();
+        }
+
+        Matrix matrix = InputMatrix(2);
+        if (n == 1) {
+            System.out.println("Determinan matriks menggunakan kofaktor: " + Determinan.detKof(matrix));
+
+        }
     }
 }
