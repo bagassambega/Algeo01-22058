@@ -7,36 +7,39 @@ public class Main {
     public static void main(String[] args) {
         boolean mainLoop = true;
 
-        System.out.println("Selamat datang di program kalkulator matriks!");
-        Scanner inputMain = new Scanner(System.in);
-        System.out.println("1. Penyelesaian SPL");
-        System.out.println("2. Determinan Matriks");
-        System.out.println("3. Invers Matriks");
-        System.out.println("4. Interpolasi Polinomial");
-        System.out.println("5. Regresi Linear Berganda");
-        System.out.println("6. Interpolasi Bicubic Spline");
-        System.out.println("7. Keluar");
-        System.out.print("Pilih operasi yang ingin dilakukan: ");
-        int choice = inputMain.nextInt();
+        while (mainLoop) {
+            System.out.println("Selamat datang di program kalkulator matriks!");
+            Scanner inputMain = new Scanner(System.in);
+            System.out.println("1. Penyelesaian SPL");
+            System.out.println("2. Determinan Matriks");
+            System.out.println("3. Invers Matriks");
+            System.out.println("4. Interpolasi Polinomial");
+            System.out.println("5. Regresi Linear Berganda");
+            System.out.println("6. Interpolasi Bicubic Spline");
+            System.out.println("7. Keluar");
+            System.out.print("Pilih operasi yang ingin dilakukan: ");
+            int choice = inputMain.nextInt();
 
 
-        switch (choice) {
-            case 1:
-                SPL();
-                break;
-            case 2:
-                MainDeterminant();
-            case 7:
-                System.out.println("Terima kasih telah menggunakan program ini!");
-                mainLoop = false;
-                break;
-            default:
-                System.out.println("Input tidak valid!");
+            switch (choice) {
+                case 1:
+                    SPL();
+                    break;
+                case 2:
+                    MainDeterminant();
+                case 7:
+                    System.out.println("Terima kasih telah menggunakan program ini!");
+                    mainLoop = false;
+                    break;
+                default:
+                    System.out.println("Input tidak valid!");
+            }
         }
     }
 
 
     public static Matrix InputMatrix(int choice) {
+        // choice untuk menentukan apakah matriks yang diimasukkan harus matriks persegi atau bukan
         Scanner inputMatrix = new Scanner(System.in);
         System.out.print("Masukkan matrix melalui terminal (1) atau file (2)?: ");
         int InputMatrixChoice = inputMatrix.nextInt();
@@ -51,7 +54,7 @@ public class Main {
             }
         }
 
-        switch (InputMatrixChoice) {
+        switch (InputMatrixChoice) { // Menentukan bentuk matriks yang dimasukkan
             case 1:
                 Scanner inputRow = new Scanner(System.in);
                 Scanner inputCol = new Scanner(System.in);
@@ -61,7 +64,7 @@ public class Main {
                     col = inputCol.nextInt();
                     System.out.print("Masukkan jumlah persamaan: ");
                     row = inputRow.nextInt();
-                    while (row < col) { // Ada -1 karena
+                    while (row < col) { // Minimal jika ada n variabel, harus ada n persamaan
                         System.out.println("Jumlah persamaan minimal sama dengan jumlah variabel.");
                         System.out.print("Masukkan jumlah variabel dalam persamaan: ");
                         col = inputCol.nextInt();
@@ -75,16 +78,22 @@ public class Main {
                     col = inputCol.nextInt();
                     System.out.print("Masukkan banyak baris matriks: ");
                     row = inputRow.nextInt();
+                    while (row != col) { // Harus bentuknya matriks persegi
+                        System.out.println("Matriks persegi harus memiliki jumlah kolom dan baris yang sama.");
+                        System.out.print("Masukkan banyak kolom matriks: ");
+                        col = inputCol.nextInt();
+                        System.out.print("Masukkan banyak baris matriks: ");
+                        row = inputRow.nextInt();
+                    }
                 }
                 Matrix matCLI = new Matrix(row, col);
                 matCLI.readMatrixCLI(matCLI.row, matCLI.col);
                 return matCLI;
             case 2:
                 Scanner inputFilename = new Scanner(System.in);
-                System.out.print("\nMasukkan nama file: ");
+                System.out.print("Masukkan path file (relatif terhadap folder bin): ");
                 String filePath = inputFilename.nextLine();
                 Matrix matFile = new Matrix(getRowFile(filePath), getColFile(filePath, getRowFile(filePath)));
-                matFile.printMatrix();
                 matFile.readMatrixFile(filePath);
                 return matFile;
             default:
@@ -146,8 +155,6 @@ public class Main {
         Matrix matriks = InputMatrix(1);
         if (SPLchoicenum == 1) {
             SPL.CreateMatrixEselon(matriks);
-            System.out.println("Bentuk matriks eselon: ");
-            matriks.printMatrix();
             SPL.solveSPLEchelon(matriks);
         }
         else if (SPLchoicenum == 2) {
@@ -160,10 +167,10 @@ public class Main {
             }
             else {
                 SPL.CreateMatrixEselonReduced(matriks);
-                System.out.println("Bentuk matriks tereduksi: ");
-                matriks.printMatrix();
+                SPL.solveSPLReduced(matriks);
             }
         }
+        // Lanjut metode lain sampai 4
     }
 
     public static void MainDeterminant() {
@@ -182,7 +189,6 @@ public class Main {
         Matrix matrix = InputMatrix(2);
         if (n == 1) {
             System.out.println("Determinan matriks menggunakan kofaktor: " + Determinan.detKof(matrix));
-
         }
     }
 }

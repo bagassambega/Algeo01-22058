@@ -71,9 +71,7 @@ public class Matrix {
         System.out.println("]");
     }
 
-    public boolean checkSquare() {
-        return this.row == this.col;
-    }
+
 
     public void roundElmtMatrix() {
         for (int i = 0; i < this.row; i++) {

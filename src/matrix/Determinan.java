@@ -52,7 +52,7 @@ public class Determinan {
         return determinant;
     }
 
-    public static double detReduksi(Matrix matrix) {
-
-    }
+//    public static double detReduksi(Matrix matrix) {
+//
+//    }
 }

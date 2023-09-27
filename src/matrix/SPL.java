@@ -22,6 +22,7 @@ public class SPL {
             divideRowSelf(matrix, row, matrix.getElmt(row, i));
         }
     }
+    
 
     public static void divideRowSelf(Matrix matrix, int row, double divider) {
         for (int i = 0; i < matrix.col; i++) {
@@ -99,22 +100,20 @@ public class SPL {
                     for (int j = 0; j < i; j++) {
                         if (matrix.getElmt(i, j) != 0) {
                             double pengali = matrix.getElmt(i, j) / matrix.getElmt(j, j);
-                            if (pengali < 0) {
-                                pengali *= -1;
-                            }
+                            System.out.println(pengali);
                             kaliRow(matrix, pengali, j);
                             kurangRow(matrix, i, j);
                             bagiRow(matrix, pengali, j);
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 break;
             }
 
-        // Proses membuat angka 1 pertama
+            // Proses membuat angka 1 pertama
         }
+
         for (int i = 1; i < matrix.row; i++) {
             // Jika baris tidak semuanya 0 atau tidak semuanya 0 kecuali result, maka akan dibuat pembuat 0 nya
             if (findIndexColFirstNonZero(matrix, i) != -1 || findIndexColFirstNonZero(matrix, i) != matrix.col - 1) {
@@ -132,9 +131,6 @@ public class SPL {
             for (int j = matrix.col - 2; j > i; j--) {
                 if (matrix.getElmt(i, j) != 0) {
                     double pengali = matrix.getElmt(i, j) / matrix.getElmt(j, j);
-                    if (pengali < 0) {
-                        pengali *= -1;
-                    }
                     kaliRow(matrix, pengali, j);
                     kurangRow(matrix, i, j);
                     bagiRow(matrix, pengali, j);
@@ -163,6 +159,14 @@ public class SPL {
                 double temp = recursionSolve(matrix, i, i);
                 System.out.printf("x%d = %f\n", i + 1, temp);
             }
+        }
+    }
+
+    public static void solveSPLReduced(Matrix matrix) {
+        // Prekondisi : Matriks sudah dalam bentuk matriks eselon tereduksi
+        System.out.println("Nilai setiap variabel adalah: ");
+        for (int i = 0; i < matrix.row; i++) {
+            System.out.printf("X%d = %f\n", i + 1, matrix.getElmt(i, matrix.col - 1));
         }
     }
 
