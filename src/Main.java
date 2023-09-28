@@ -20,7 +20,6 @@ public class Main {
             System.out.print("Pilih operasi yang ingin dilakukan: ");
             int choice = inputMain.nextInt();
 
-
             switch (choice) {
                 case 1:
                     SPL();
@@ -37,17 +36,16 @@ public class Main {
         }
     }
 
-
     public static Matrix InputMatrix(int choice) {
-        // choice untuk menentukan apakah matriks yang diimasukkan harus matriks persegi atau bukan
+        // choice untuk menentukan apakah matriks yang diimasukkan harus matriks persegi
+        // atau bukan
         Scanner inputMatrix = new Scanner(System.in);
         System.out.print("Masukkan matrix melalui terminal (1) atau file (2)?: ");
         int InputMatrixChoice = inputMatrix.nextInt();
         while (true) {
             if (InputMatrixChoice == 1 || InputMatrixChoice == 2) {
                 break;
-            }
-            else {
+            } else {
                 System.out.println("Input tidak valid!");
                 System.out.print("Masukkan matrix melalui terminal (1) atau file (2)?: ");
                 InputMatrixChoice = inputMatrix.nextInt();
@@ -72,8 +70,7 @@ public class Main {
                         row = inputRow.nextInt();
                     }
                     col += 1; // Agar bisa memasukkan hasil persamaan
-                }
-                else {
+                } else {
                     System.out.print("Masukkan banyak kolom matriks: ");
                     col = inputCol.nextInt();
                     System.out.print("Masukkan banyak baris matriks: ");
@@ -126,8 +123,7 @@ public class Main {
             fileInput.close();
             bufferedReader.close();
             return Arrayline.length;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.err.println(e);
             return 0;
         }
@@ -147,8 +143,7 @@ public class Main {
                 System.out.println("Input tidak valid!");
                 System.out.print("Masukkan jenis penyelesaian SPL: ");
                 SPLchoicenum = SPLchoice.nextInt();
-            }
-            else {
+            } else {
                 break;
             }
         }
@@ -156,20 +151,20 @@ public class Main {
         if (SPLchoicenum == 1) {
             SPL.CreateMatrixEselon(matriks);
             SPL.solveSPLEchelon(matriks);
-        }
-        else if (SPLchoicenum == 2) {
+        } else if (SPLchoicenum == 2) {
             SPL.CreateMatrixEselon(matriks);
             if (SPL.checkSolveType(matriks) == -1) {
                 System.out.println("Tidak ada solusi yang memenuhi.");
-            }
-            else if (SPL.checkSolveType(matriks) == 1) {
+            } else if (SPL.checkSolveType(matriks) == 1) {
                 SPL.parametricSol(matriks);
-            }
-            else {
+            } else {
                 SPL.CreateMatrixEselonReduced(matriks);
                 SPL.solveSPLReduced(matriks);
             }
+        } else if (SPLchoicenum == 4) {
+            SPL.CramerSolver(matriks);
         }
+
         // Lanjut metode lain sampai 4
     }
 

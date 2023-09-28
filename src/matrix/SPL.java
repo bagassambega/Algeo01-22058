@@ -1,5 +1,8 @@
 package matrix;
+
 import java.util.*;
+import matrix.Determinan;
+
 public class SPL {
     public static int findIndexColFirstNonZero(Matrix matrix, int row) {
         // Mencari indeks pertama kemunculan angka non-0
@@ -11,7 +14,6 @@ public class SPL {
         return -1; // Jika semua baris adalah 0, maka return -1
     }
 
-
     public static void createFirstOne(Matrix matrix, int row) {
         // Membuat angka 1 pertama di setiap barisnya
         int i = 0;
@@ -22,7 +24,6 @@ public class SPL {
             divideRowSelf(matrix, row, matrix.getElmt(row, i));
         }
     }
-    
 
     public static void divideRowSelf(Matrix matrix, int row, double divider) {
         for (int i = 0; i < matrix.col; i++) {
@@ -56,12 +57,12 @@ public class SPL {
         }
     }
 
-
     public static int checkSolveType(Matrix matrix) {
         // Mengecek tipe penyelesaian matriks
         for (int i = 0; i < matrix.row; i++) {
             if (findIndexColFirstNonZero(matrix, i) == -1) {
-                return 1; // Jika ditemukan baris yang 0 semua, maka persamaannya akan parametric sol, return 1
+                return 1; // Jika ditemukan baris yang 0 semua, maka persamaannya akan parametric sol,
+                          // return 1
             }
         }
         for (int i = 0; i < matrix.row; i++) {
@@ -69,27 +70,25 @@ public class SPL {
                 return -1; // Jika ditemukan kondisi matriks yang tidak ada penyelesaian, return -1
             }
         }
-        return 0; //  sisanya valid
+        return 0; // sisanya valid
     }
-
 
     public static void CreateMatrixEselon(Matrix matrix) {
         matrix.roundElmtMatrix();
         // Swap row agar tidak ada angka 0 di atas yang melebihi di bawah
         for (int i = 0; i < matrix.row; i++) {
             // cek apakah di satu baris semuanya 0 atau 0 semua kecuali di hasil
-            if ((findIndexColFirstNonZero(matrix, i) != -1) || (findIndexColFirstNonZero(matrix, i) != matrix.col - 1)) {
+            if ((findIndexColFirstNonZero(matrix, i) != -1)
+                    || (findIndexColFirstNonZero(matrix, i) != matrix.col - 1)) {
                 for (int j = i; j < matrix.row; j++) {
                     if (findIndexColFirstNonZero(matrix, j) < findIndexColFirstNonZero(matrix, i)) {
                         swapRow(matrix, j, i);
                     }
                 }
-            }
-            else {
+            } else {
                 break; // Jika baris semuanya 0 atau 0 semua kecuali di result
             }
         }
-
 
         // Proses membuat angka 0 yang di bawahnya lebih 1 dari baris atasnya
         for (int i = 0; i < matrix.row; i++) {
@@ -115,16 +114,17 @@ public class SPL {
         }
 
         for (int i = 1; i < matrix.row; i++) {
-            // Jika baris tidak semuanya 0 atau tidak semuanya 0 kecuali result, maka akan dibuat pembuat 0 nya
+            // Jika baris tidak semuanya 0 atau tidak semuanya 0 kecuali result, maka akan
+            // dibuat pembuat 0 nya
             if (findIndexColFirstNonZero(matrix, i) != -1 || findIndexColFirstNonZero(matrix, i) != matrix.col - 1) {
                 createFirstOne(matrix, i);
             }
         }
     }
 
-
-    public static void CreateMatrixEselonReduced (Matrix matrix) {
-        // Prekondisi: sudah dilakukan CreateMatrixEselon sebelumnya, jadi diagonalnya sudah 1
+    public static void CreateMatrixEselonReduced(Matrix matrix) {
+        // Prekondisi: sudah dilakukan CreateMatrixEselon sebelumnya, jadi diagonalnya
+        // sudah 1
         // Sudah dicek apakah ada baris 0 semua (pakai fungsi checkInMatrixAllZero)
         for (int i = matrix.row - 2; i >= 0; i--) {
             // i = 1; j = 2
@@ -140,20 +140,16 @@ public class SPL {
 
     }
 
-
     public static void parametricSol(Matrix matrix) {
 
     }
 
-
     public static void solveSPLEchelon(Matrix matrix) {
         if (checkSolveType(matrix) == -1) {
             System.out.println("Tidak ada penyelesaian untuk matriks ini.");
-        }
-        else if (checkSolveType(matrix) == 1) {
+        } else if (checkSolveType(matrix) == 1) {
             parametricSol(matrix);
-        }
-        else {
+        } else {
             System.out.println("Solusi persamaan adalah:");
             for (int i = matrix.row - 1; i >= 0; i--) {
                 double temp = recursionSolve(matrix, i, i);
@@ -170,19 +166,55 @@ public class SPL {
         }
     }
 
-
     public static double recursionSolve(Matrix matrix, int n, int row) {
         if (n == matrix.col - 2 && row == matrix.row - 1) {
             return matrix.getElmt(row, matrix.col - 1);
-        }
-        else {
-            return matrix.getElmt(row, matrix.col + 1) - recursionSolve(matrix, n + 1, row - 1) * matrix.getElmt(row, n - 1);
+        } else {
+            return matrix.getElmt(row, matrix.col + 1)
+                    - recursionSolve(matrix, n + 1, row - 1) * matrix.getElmt(row, n - 1);
         }
     }
 
+    public static Matrix getEquationOnly(Matrix m) {
+        Matrix M = new Matrix(m.row, m.col - 1);
+        for (int i = 0; i <= m.row - 1; i++) {
+            for (int j = 0; j <= m.col - 2; j++) {
+                M.matrix[i][j] = m.matrix[i][j];
+            }
+        }
+        return M;
 
+    }
 
+    public static Matrix getAnsOnly(Matrix m) {
+        Matrix M = new Matrix(m.row, 1);
+        for (int i = 0; i <= m.row - 1; i++) {
+            M.matrix[i][0] = m.getElmt(i, 0);
+        }
+        return M;
 
+    }
 
+    public static void CramerSolver(Matrix m) {
+        Matrix m1 = getAnsOnly(m);
+        if (Determinan.detKof(m) != 0) {
+            double detawal = Determinan.detKof(m);// sebagai pembagi
+            for (int i = 0; i <= m.col - 2; i++) {// loop untuk interate ganti kolom ke i dengan ANS
+                Matrix m2 = getEquationOnly(m);
+                for (int j = 0; j <= m.row - 1; j++) {// algoritma ganti baris
+                    m2.matrix[j][i] = m1.matrix[j][0];
+                }
+                double det = Determinan.detKof(m2);// cari determinan setelah diganti
+                double solusi = det / detawal; // rumus kramer
+                if (i == 0) {
+                    System.out.println("Solusi persamaan adalah:");
+                }
+                System.out.printf("x%d = %f\n", i + 1, solusi);
+            }
+
+        } else {
+            System.out.println("Determinan == 0, maka solusi dari SPL di atas tidak unik, gunakan metode lain.");
+        }
+    }
 
 }
