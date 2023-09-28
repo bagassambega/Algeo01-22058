@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Test
+public class TestInverse
 {
     public static void main (String[] args)
     {
@@ -27,7 +27,14 @@ public class Test
         System.out.print("\nThe Inverse is :\n");
         if (inverse(a, inv))
             display(inv);
-            
+        
+        System.out.print("\nInput constants for SPL : \n");
+        for(int i=0; i<n; i++)
+        {
+            constants[i] = input.nextDouble();
+        }
+
+        inverseSPL(a, constants);
         input.close();
     }
 
