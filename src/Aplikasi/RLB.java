@@ -1,4 +1,4 @@
-package Application;
+package Aplikasi;
 
 import java.util.*;
 
@@ -156,18 +156,103 @@ public class RLB {
             }
 
         }
-        return retmatrix;
+        retmatrix.printMatrix();
+        SPL.CreateMatrixEselon(retmatrix, 1);
+        if (SPL.checkSolveType(retmatrix, 1) == 1 || SPL.checkSolveType(retmatrix, 1) == -1) {
+            return null;
+        } else {
+            SPL.CreateMatrixEselonReduced(retmatrix);
+            return retmatrix;
+        }
 
     }
 
-    public static void main(String[] args) {
+    public static void output(Matrix eselon, Matrix ans) {
+        for (int i = 0; i <= eselon.row - 1; i++) {
+            if (i == 0) {
+                System.out.print("f(");
+            } else if (i == eselon.row - 1) {
+                System.out.printf("x%d) = ", i);
+            } else {
+                System.out.printf("x%d,", i);
+            }
+        }
+
+        for (int i = 0; i <= eselon.row - 1; i++) {
+            if (i == 0) {
+                if (eselon.matrix[i + 1][eselon.col - 1] >= 0) {
+                    System.out.printf("%.4f + ", eselon.matrix[i][eselon.col - 1]);
+                } else {
+                    System.out.printf("%.4f ", eselon.matrix[i][eselon.col - 1]);
+                }
+
+            } else if (i == eselon.row - 1) {
+                System.out.printf("%.4fx%d, ", eselon.matrix[i][eselon.col - 1], i);
+            } else {
+                if (eselon.matrix[i + 1][eselon.col - 1] >= 0.0000) {
+                    System.out.printf("%.4fx%d + ", eselon.matrix[i][eselon.col - 1], i);
+                } else {
+                    System.out.printf("%.4fx%d ", eselon.matrix[i][eselon.col - 1], i);
+                }
+
+            }
+        }
+        double taksir = 0;
+        for (int i = 0; i <= eselon.row - 1; i++) {
+            if (i == 0) {
+                taksir += eselon.matrix[i][eselon.col - 1];
+            } else {
+                taksir += eselon.matrix[i][eselon.col - 1] * ans.matrix[0][i - 1];
+            }
+        }
+        for (int i = 0; i <= eselon.row - 1; i++) {
+            if (i == 0) {
+                System.out.print("f(");
+            } else if (i == eselon.row - 1) {
+                System.out.printf("%.4f) = %.4f", ans.matrix[0][i - 1], taksir);
+            } else {
+                System.out.printf("%.4f,", ans.matrix[0][i - 1]);
+            }
+        }
+
+    }
+
+    public static void menu() {
         Matrix titik = new Matrix(0, 0);
         Matrix ans = new Matrix(0, 0);
-        inputRLBFile(titik, ans);
-        titik.printMatrix();
-        ans.printMatrix();
-        normaleq(titik).printMatrix();
+        System.out.println("**********REGRESI LINEAR BERGANDA**********");
+        System.out.println("Silahkan pilih cara input data:");
+        System.out.println("1. File");
+        System.out.println("2. Keyboard");
+        System.out.print("Pilihan input : ");
 
+        int choice = 0;
+        boolean validInput = false;
+
+        while (!validInput) {
+            try {
+                choice = input.nextInt();
+                if (choice == 1 || choice == 2) {
+                    validInput = true;
+                    input.nextLine();
+                } else {
+                    System.out.println("Pilihan tidak valid. Harap masukkan 1 atau 2.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Input harus berupa bilangan bulat.");
+                input.nextLine(); // Clear the invalid input
+            }
+        }
+
+        if (choice == 1) {
+            inputRLBFile(titik, ans);
+        } else {
+            inputRLBkey(titik, ans);
+        }
+        if (normaleq(titik) == null) {
+            System.out.print("Tidak dapat ditemukan nilai koefisien dari titik-titik yang diberikan.");
+        } else {
+            output(normaleq(titik), ans);
+        }
     }
-
 }

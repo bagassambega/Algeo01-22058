@@ -24,7 +24,6 @@ public class Matrix {
     }
 
     public void readMatrixCLI(int row, int col) {
-        System.out.println("Masukkan elemen matriks:");
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 this.matrix[i][j] = scanElmt.nextDouble();
@@ -48,6 +47,7 @@ public class Matrix {
             bufferedReader.close();
         }
         catch (IOException e) {
+            System.out.println("File tidak ditemukan/error!");
             System.err.println(e);
         }
     }
@@ -76,14 +76,12 @@ public class Matrix {
     public void roundElmtMatrix() {
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.col - 1; j++) {
-//                BigDecimal bd = BigDecimal.valueOf(this.matrix[i][j]);
-//                BigDecimal round =  bd.setScale(5, RoundingMode.HALF_UP);
-//                this.matrix[i][j] = round.doubleValue();
                 double scale = Math.pow(10, 5);
                 this.matrix[i][j] = Math.round(getElmt(i, j) * scale) / scale;
             }
         }
     }
+    
 
     
 
