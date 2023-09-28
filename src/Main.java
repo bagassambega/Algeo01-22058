@@ -231,6 +231,24 @@ public class Main {
         Matrix interpol = InputMatrix(4); // 4 adalah untuk interpolasi linear
         InterPolinom.makeEq(interpol);
         InterPolinom.solveEq(interpol);
+        System.out.println("Apakah ingin mengaproksimasi nilai? (Y/N): ");
+        Scanner n = new Scanner(System.in);
+        String c = n.next();
+        while (true) {
+            if (c.equals("Y") || c.equals("y")) {
+                System.out.print("Masukkan nilai yang ingin diaproksimasi: ");
+                double val = n.nextDouble();
+                System.out.printf("f(%f) = %f\n", val, InterPolinom.approxValue(InterPolinom.saveEqInArr(interpol), val));
+                System.out.print("Apakah ingin input nilai lagi? ");
+                c = n.next();
+            }
+            else if (c.equals("N") || c.equals("n")) {
+                break;
+            }
+            else {
+                System.out.println("Input tidak valid");
+            }
+        }
     }
 
 }
