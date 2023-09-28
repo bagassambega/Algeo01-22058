@@ -215,6 +215,25 @@ public class SPL {
         }
     }
 
+    static void inverseSPL(double mtrx[][], double constant[]){
+        int n = mtrx.length;
+        int index = 1;
+        double sum;
+        double [][]inversed = new double[n][n];
+
+        if(Inverse.inverse(mtrx, inversed))
+        {
+            for(int i = 0; i < n; i++){
+                sum = 0;
+                for(int j = 0; j < n; j++){
+                    sum += inversed[i][j] * constant[j];
+                }
+
+                System.out.printf("x%d = %.6f\n", index, sum);
+                index++;
+            }
+        }
+    }
     public static Matrix getEquationOnly(Matrix m) {
         Matrix M = new Matrix(m.row, m.col - 1);
         for (int i = 0; i <= m.row - 1; i++) {
