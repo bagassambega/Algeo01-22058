@@ -171,9 +171,19 @@ public class Main {
         Matrix matriks = InputMatrix(1);
         if (SPLchoicenum == 1) {
             SPL.CreateMatrixEselon(matriks, 1);
+            for (int l = 0; l < matriks.row; l++) {
+                for (int k = 0; k < matriks.col; k++) { // Rounding hasil
+                    matriks.matrix[l][k] = matriks.round2(matriks.matrix[l][k], 4);
+                }
+            }
             SPL.solveSPLEchelon(matriks, 1);
         } else if (SPLchoicenum == 2) {
             SPL.CreateMatrixEselon(matriks, 1);
+            for (int l = 0; l < matriks.row; l++) {
+                for (int k = 0; k < matriks.col; k++) { // Rounding hasil
+                    matriks.matrix[l][k] = matriks.round2(matriks.matrix[l][k], 4);
+                }
+            }
             if (SPL.checkSolveType(matriks, 1) == -1) {
                 System.out.println("Tidak ada solusi yang memenuhi.");
             } else if (SPL.checkSolveType(matriks, 1) == 1) {
@@ -217,19 +227,18 @@ public class Main {
         Matrix interpol = InputMatrix(4); // 4 adalah untuk interpolasi linear
         InterPolinom.makeEq(interpol);
         InterPolinom.solveEq(interpol);
-        System.out.println("Apakah ingin mengaproksimasi nilai? (Y/N): ");
         Scanner n = new Scanner(System.in);
-        String c = n.next();
-        while (true) {
+        boolean inp = true;
+        while (inp) {
+            System.out.print("Apakah ingin mengaproksimasi nilai? (Y/N): ");
+            String c = n.next();
             if (c.equals("Y") || c.equals("y")) {
                 System.out.print("Masukkan nilai yang ingin diaproksimasi: ");
                 double val = n.nextDouble();
                 System.out.printf("f(%f) = %f\n", val,
                         InterPolinom.approxValue(InterPolinom.saveEqInArr(interpol), val));
-                System.out.print("Apakah ingin input nilai lagi? ");
-                c = n.next();
             } else if (c.equals("N") || c.equals("n")) {
-                break;
+                inp = false;
             } else {
                 System.out.println("Input tidak valid");
             }

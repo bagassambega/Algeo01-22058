@@ -131,11 +131,6 @@ public class SPL {
             }
         }
 
-        for (int l = 0; l < matrix.row; l++) {
-            for (int k = 0; k < matrix.col; k++) { // Rounding hasil
-                matrix.matrix[l][k] = matrix.round2(matrix.matrix[l][k], 5);
-            }
-        }
 
         if (checkSolveType(matrix, colTambahan) != 1 || checkSolveType(matrix, colTambahan) != -1) {
             // Proses membuat angka 1 pertama
