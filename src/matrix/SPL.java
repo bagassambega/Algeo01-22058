@@ -44,6 +44,14 @@ public class SPL {
             matrix.matrix[row][i] *= pengali;
         }
     }
+    public static Matrix RetKaliRow(Matrix matrix, double pengali, int row) {
+        Matrix m3 = new Matrix(matrix.row, matrix.col);
+        for (int i = 0; i < matrix.col; i++) {
+            m3.matrix[row][i] *= pengali;
+        }
+        return matrix;
+        
+    }
 
     public static void bagiRow(Matrix matrix, double pengali, int row) {
         for (int i = 0; i < matrix.col; i++) {
@@ -144,6 +152,8 @@ public class SPL {
             }
         }
     }
+
+
 
 
     public static void CreateMatrixEselonReduced (Matrix matrix) {
