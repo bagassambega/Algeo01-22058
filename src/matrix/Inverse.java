@@ -3,7 +3,7 @@ import java.util.Scanner;
  
 public class Inverse 
 {
-    static double[][] getCofactor(double A[][], int given_row, int given_column)
+    static double[][] getCofactor(double[][] A, int given_row, int given_column)
     {
         int temp_row = 0, temp_column;
         int n = A.length;
@@ -30,9 +30,9 @@ public class Inverse
         return temp;
     }
     
-    static double determinant(double A[][])
+    static double determinant(double[][] A)
     {
-        int D = 0;
+        double D = 0;
     
         //Basis
         int N = A.length;
@@ -51,7 +51,7 @@ public class Inverse
         return D;
     }
     
-    static void adjoint(double A[][], double [][]adj)
+    static void adjoint(double[][] A, double [][]adj)
     {
         int N = A.length;
 
@@ -73,7 +73,7 @@ public class Inverse
         }
     }
 
-    static boolean inverse(double A[][], double [][]inverse)
+    static boolean inverse(double[][] A, double [][]inverse)
     {
         int N = A.length;
 
@@ -89,18 +89,17 @@ public class Inverse
     
         for (int i = 0; i < N; i++)
             for (int j = 0; j < N; j++)
-                inverse[i][j] = adj[i][j]/(double)det;
+                inverse[i][j] = adj[i][j]/det;
     
         return true;
     }
     
-    static void display(double A[][])
+    static void display(double[][] A)
     {
         int N = A.length;
-        for (int i = 0; i < N; i++)
-        {
+        for (double[] doubles : A) {
             for (int j = 0; j < N; j++)
-                System.out.printf("%.6f ",A[i][j]);
+                System.out.printf("%.6f ", doubles[j]);
             System.out.println();
         }
     }
