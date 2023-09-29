@@ -30,7 +30,7 @@ public class Determinan {
         }
 
         double determinant = 0;
-        int sign = 1; // Used to alternate the sign while calculating cofactors.
+        int sign = 1;
 
         for (int col = 0; col < n; col++) {
             // Membuat matriks kofaktor

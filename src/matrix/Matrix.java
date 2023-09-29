@@ -73,13 +73,34 @@ public class Matrix {
 
 
 
-    public void roundElmtMatrix() {
+    public void roundElmtMatrix(int n) {
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.col - 1; j++) {
-                double scale = Math.pow(10, 5);
+                double scale = Math.pow(10, n);
                 this.matrix[i][j] = Math.round(getElmt(i, j) * scale) / scale;
             }
         }
+    }
+
+    public double round2(double value, int n) {
+        BigDecimal bd = new BigDecimal(value).setScale(n, RoundingMode.HALF_UP);
+        BigDecimal num = bd.round(new MathContext(n));
+        return num.doubleValue();
+    }
+
+
+
+    public Matrix multiplyMatrix(Matrix m1, Matrix m2) {
+        Matrix m3 = new Matrix(m1.row, m2.col);
+        for (int i = 0; i < m1.row; i++) {
+            for (int j = 0; j < m2.col; j++) {
+                m3.matrix[i][j] = 0;
+                for (int k = 0; k < m1.col; k++) {
+                    m3.matrix[i][j] += m1.matrix[i][k] * m2.matrix[k][j];
+                }
+            }
+        }
+        return m3;
     }
 
 

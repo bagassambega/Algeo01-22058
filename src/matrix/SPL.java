@@ -83,7 +83,7 @@ public class SPL {
 
 
     public static void CreateMatrixEselon(Matrix matrix, int colTambahan) { // Digunakan untuk SPL
-        matrix.roundElmtMatrix();
+        matrix.roundElmtMatrix(10);
         // Swap row agar tidak ada angka 0 di atas yang melebihi di bawah
         for (int i = 0; i < matrix.row; i++) {
             // cek apakah di satu baris semuanya 0 atau 0 semua kecuali di hasil
@@ -114,14 +114,25 @@ public class SPL {
                             bagiRow(matrix, pengali, j);
                         }
                     }
-                    if (i <= matrix.row - 2) {
-                        if (findIndexColFirstNonZero(matrix, i) > findIndexColFirstNonZero(matrix, i + 1)) {
-                            swapRow(matrix, i, i+1);
-                            i -= 1;
+                    int swap = 0;
+                    for (int j = 0; j < matrix.row; j++) {
+                        if (j <= matrix.row - 2) {
+                            if (findIndexColFirstNonZero(matrix, j) > findIndexColFirstNonZero(matrix, j + 1)) {
+                                swapRow(matrix, j, j + 1);
+                                swap++;
+                            }
                         }
                     }
+                    if (swap > 0) {
+                        i = 0;
+                    }
                 }
+                matrix.roundElmtMatrix(10);
             }
+            System.out.println("\n");
+        }
+        for (int k = 0; k < matrix.col; k++) {
+            matrix.matrix[matrix.row - 1][k] = matrix.round2(matrix.matrix[matrix.row - 1][k], 5);
         }
 
         if (checkSolveType(matrix, colTambahan) != 1 || checkSolveType(matrix, colTambahan) != -1) {
@@ -155,8 +166,55 @@ public class SPL {
 
     }
 
+    public static int nZero(Matrix matrix, int row, int colTambahan) {
+        int n = 0;
+        for (int i = 0; i < matrix.col - colTambahan; i++) {
+            if (matrix.matrix[row][i] == 0) {
+                n++;
+            }
+        }
+        return n;
+    }
+
 
     public static void parametricSol(Matrix matrix) {
+        Matrix arrayHasil = new Matrix(1, matrix.row);
+
+        // Inisialisasi arrayHasil dengan NaN
+        for (int i = 0; i < arrayHasil.col; i++) {
+            arrayHasil.matrix[0][i] = Double.NaN;
+        }
+
+        // Proses mencari nilai variabel tunggal yang unik
+        for (int i = matrix.row - 1; i > 0; i--) {
+            if (findIndexColFirstNonZero(matrix, i) == -1) {
+                continue;
+            }
+            else {
+                if (nZero(matrix, i, 1) == matrix.col - 2) {
+                    arrayHasil.matrix[0][findIndexColFirstNonZero(matrix, i)] = matrix.matrix[i][matrix.col - 1] / matrix.matrix[i][findIndexColFirstNonZero(matrix, findIndexColFirstNonZero(matrix, i))];
+                }
+            }
+        }
+
+        // Proses mencari nilai
+
+
+        int id = 0;
+        while (Double.isNaN(arrayHasil.matrix[0][id])) {
+
+//            for (int i = 0; i < matrix.row; i++) {
+//                // Untuk menentukan
+//                if (nZero(matrix, i, 1) != 1) {
+//
+//                }
+//            }
+
+            id++;
+            if (id >= matrix.col) {
+                id = 0;
+            }
+        }
 
     }
 
@@ -195,7 +253,7 @@ public class SPL {
         }
     }
 
-    public static void recursionSolve(Matrix matrix, Matrix solrow, int row) {
+    public static void recursionSolve(Matrix matrix, Matrix solution, int row) {
         if (row < 0) {
             return;
         }
@@ -204,11 +262,11 @@ public class SPL {
             double sum = 0;
 
             for (int i = row + 1; i < var; i++) {
-                sum += matrix.matrix[row][i] * solrow.matrix[0][i];
+                sum += matrix.matrix[row][i] * solution.matrix[0][i];
             }
 
-            solrow.matrix[0][row] = (matrix.matrix[row][var] - sum) / matrix.matrix[row][row];
-            recursionSolve(matrix, solrow, row - 1);
+            solution.matrix[0][row] = (matrix.matrix[row][var] - sum) / matrix.matrix[row][row];
+            recursionSolve(matrix, solution, row - 1);
         }
     }
 

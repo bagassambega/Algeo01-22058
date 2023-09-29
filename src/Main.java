@@ -115,8 +115,9 @@ public class Main {
             case 2:
                 // Masukan dari file
                 Scanner inputFilename = new Scanner(System.in);
-                System.out.print("Masukkan path file (relatif terhadap folder bin): ");
+                System.out.print("Masukkan path file (relatif terhadap folder test): ");
                 String filePath = inputFilename.nextLine();
+                filePath = "../test/" + filePath;
                 Matrix matFile = new Matrix(getRowFile(filePath), getColFile(filePath, getRowFile(filePath)));
                 matFile.readMatrixFile(filePath);
                 return matFile;
