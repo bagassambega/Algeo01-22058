@@ -1,5 +1,7 @@
 import java.util.*;
 
+import matrix.SPL;
+
 public class TestInverse
 {
     public static void main (String[] args)
@@ -27,14 +29,15 @@ public class TestInverse
         System.out.print("\nThe Inverse is :\n");
         if (inverse(a, inv))
             display(inv);
-        
+        double []constants = new double[n-1];
         System.out.print("\nInput constants for SPL : \n");
         for(int i=0; i<n; i++)
         {
             constants[i] = input.nextDouble();
+            input.nextLine();
         }
 
-        inverseSPL(a, constants);
+        SPL.inverseSPL(a, constants);
         input.close();
     }
 
@@ -68,7 +71,7 @@ public class TestInverse
     static double determinant(double A[][])
     {
         int D = 0;
-    
+        
         //Basis
         int N = A.length;
         if (N == 1)

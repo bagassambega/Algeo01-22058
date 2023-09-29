@@ -2,6 +2,8 @@ package Aplikasi;
 import matrix.*;
 import java.util.Scanner;
 
+import Utils.Utils;
+
 public class InterPolinom {
     public static void makeEq(Matrix matrix) {
         // Membuat nilai input variabel menjadi pangkat n
@@ -67,5 +69,27 @@ public class InterPolinom {
             }
         }
         return val;
+    }
+    public static void Menu() {
+        System.out.println("\n==========INTERPOLASI LINEAR============");
+        Matrix interpol = Utils.InputMatrix(4); // 4 adalah untuk interpolasi linear
+        InterPolinom.makeEq(interpol);
+        InterPolinom.solveEq(interpol);
+        Scanner n = new Scanner(System.in);
+        boolean inp = true;
+        while (inp) {
+            System.out.print("Apakah ingin mengaproksimasi nilai? (Y/N): ");
+            String c = n.next();
+            if (c.equals("Y") || c.equals("y")) {
+                System.out.print("Masukkan nilai yang ingin diaproksimasi: ");
+                double val = n.nextDouble();
+                System.out.printf("f(%f) = %f\n", val,
+                        InterPolinom.approxValue(InterPolinom.saveEqInArr(interpol), val));
+            } else if (c.equals("N") || c.equals("n")) {
+                inp = false;
+            } else {
+                System.out.println("Input tidak valid");
+            }
+        }
     }
 }

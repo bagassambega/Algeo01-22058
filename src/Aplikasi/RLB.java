@@ -6,29 +6,37 @@ import matrix.*;
 
 import java.io.*;
 
+import Utils.*;
+
 public class RLB {
     private static Scanner input = new Scanner(System.in);
 
     public static void inputRLBFile(Matrix titik, Matrix ans) {
-        System.out.print("Masukkan nama file: ");
-        String fileName = input.nextLine();
+        String fileName = "";
         int row = 0;
         int col = 0;
-        try {
-            File file = new File("../test/" + fileName);
-            Scanner fReader = new Scanner(file);
-            while (fReader.hasNextLine()) {
-                String s = fReader.nextLine();
-                String[] temp = s.split(" ", 0);
-
-                row += 1;
-                if (col == 0) {
-                    col = temp.length;
+        boolean validFilePath = false;
+        while (!validFilePath) {
+            try {
+                System.out.print("Masukkan nama file: ");
+                fileName = input.nextLine();
+                File file = new File("../test/" + fileName);
+                
+                Scanner fReader = new Scanner(file);
+                validFilePath = true;
+                while (fReader.hasNextLine()) {
+                    String s = fReader.nextLine();
+                    String[] temp = s.split(" ", 0);
+                    row += 1;
+                    if (col == 0) {
+                        col = temp.length;
+                    }
                 }
+                fReader.close();
+
+            } catch (FileNotFoundException e) {
+                System.out.println("File tidak ditemukan.");
             }
-            fReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("File tidak ditemukan.");
         }
         titik.row = row - 1;
         titik.col = col;
@@ -167,36 +175,37 @@ public class RLB {
 
     }
 
-    public static void output(Matrix eselon, Matrix ans) {
+    public static void output(Matrix eselon, Matrix ans, String[] s) {
+        s[0] = "Hasil Fungsi Dari Regresi Linear Berganda adalah :";
+        s[1] = "";
+
         for (int i = 0; i <= eselon.row - 1; i++) {
             if (i == 0) {
-                System.out.print("f(");
+
+                s[1] += "f(";
             } else if (i == eselon.row - 1) {
-                System.out.printf("x%d) = ", i);
+
+                s[1] += String.format("x%d) = ", i);
             } else {
-                System.out.printf("x%d,", i);
+
+                s[1] += String.format("x%d,", i);
             }
         }
 
         for (int i = 0; i <= eselon.row - 1; i++) {
             if (i == 0) {
-                if (eselon.matrix[i + 1][eselon.col - 1] >= 0) {
-                    System.out.printf("%.4f + ", eselon.matrix[i][eselon.col - 1]);
-                } else {
-                    System.out.printf("%.4f ", eselon.matrix[i][eselon.col - 1]);
-                }
+                s[1] += String.format("%.4f ", eselon.matrix[i][eselon.col - 1]);
 
-            } else if (i == eselon.row - 1) {
-                System.out.printf("%.4fx%d, ", eselon.matrix[i][eselon.col - 1], i);
             } else {
-                if (eselon.matrix[i + 1][eselon.col - 1] >= 0.0000) {
-                    System.out.printf("%.4fx%d + ", eselon.matrix[i][eselon.col - 1], i);
+                if (eselon.matrix[i][eselon.col - 1] >= 0.0000) {
+                    s[1] += String.format("+ %.4fx%d ", eselon.matrix[i][eselon.col - 1], i);
                 } else {
-                    System.out.printf("%.4fx%d ", eselon.matrix[i][eselon.col - 1], i);
+                    s[1] += String.format("- %.4fx%d ", Math.abs(eselon.matrix[i][eselon.col - 1]), i);
                 }
-
             }
         }
+        s[2] = "Hasil taksirannya adalah:";
+
         double taksir = 0;
         for (int i = 0; i <= eselon.row - 1; i++) {
             if (i == 0) {
@@ -205,21 +214,29 @@ public class RLB {
                 taksir += eselon.matrix[i][eselon.col - 1] * ans.matrix[0][i - 1];
             }
         }
+        s[3] = "";
+
         for (int i = 0; i <= eselon.row - 1; i++) {
             if (i == 0) {
-                System.out.print("f(");
+                s[3] += "f(";
             } else if (i == eselon.row - 1) {
-                System.out.printf("%.4f) = %.4f", ans.matrix[0][i - 1], taksir);
+
+                s[3] += String.format("%.4f) = %.4f", ans.matrix[0][i - 1], taksir);
             } else {
-                System.out.printf("%.4f,", ans.matrix[0][i - 1]);
+
+                s[3] += String.format("%.4f,", ans.matrix[0][i - 1]);
             }
         }
-
+        for (int i = 0; i <= 3; i++) {
+            System.out.printf("%s", s[i]);
+            System.out.println();
+        }
     }
 
     public static void menu() {
         Matrix titik = new Matrix(0, 0);
         Matrix ans = new Matrix(0, 0);
+        String[] s = new String[4];
         System.out.println("**********REGRESI LINEAR BERGANDA**********");
         System.out.println("Silahkan pilih cara input data:");
         System.out.println("1. File");
@@ -252,7 +269,10 @@ public class RLB {
         if (normaleq(titik) == null) {
             System.out.print("Tidak dapat ditemukan nilai koefisien dari titik-titik yang diberikan.");
         } else {
-            output(normaleq(titik), ans);
+            output(normaleq(titik), ans, s);
+            
+            Utils.solutionToFile(s);
+
         }
     }
 }

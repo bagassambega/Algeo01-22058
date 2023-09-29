@@ -1,11 +1,12 @@
 package Aplikasi;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import Utils.Utils;
-import matrix.Determinan;
-import matrix.Matrix;
+import Utils.*;
+import matrix.*;
 
 public class DeterminanApp {
     private static Scanner input = new Scanner(System.in);
@@ -55,20 +56,34 @@ public class DeterminanApp {
             retmat.matrix = new double[retmat.row][retmat.col];
             retmat.readMatrixCLI(retmat.row, retmat.col);
         } else {
-            System.out.print("Masukkan path file (relatif terhadap folder test): ");
-            String filePath = input.nextLine();
-            filePath = "../test/" + filePath;
+            String filePath = "";
+            boolean validFilePath = false;
+
+            while (!validFilePath) {
+                try {
+                    System.out.print("Masukkan path file (relatif terhadap folder test): ");
+                    filePath = input.nextLine();
+                    filePath = "../test/" + filePath;
+                    File file = new File(filePath);
+                    Scanner fReader = new Scanner(file);
+                    validFilePath = true;
+                } catch (FileNotFoundException e) {
+                    System.out.println("File tidak ditemukan. Silahkan masukkan path yang valid.");
+                }
+            }
             while (!(Utils.getRowFile(filePath) == Utils.getColFile(filePath, Utils.getRowFile(filePath)))) {
                 System.out.println("Matriks yang ada bukan matriks segiempat, silahkan ganti file anda!");
                 System.out.print("Masukkan path file (relatif terhadap folder test): ");
                 filePath = input.nextLine();
                 filePath = "../test/" + filePath;
             }
+
             retmat.row = Utils.getRowFile(filePath);
             retmat.col = Utils.getRowFile(filePath);
             retmat.matrix = new double[retmat.row][retmat.col];
             retmat.readMatrixFile(filePath);
         }
+
         System.out.println("Silahkan pilih metode yang ingin digunakan !");
         System.out.println("1. Metode kofaktor");
         System.out.println("2. Metode reduksi baris");
@@ -79,11 +94,15 @@ public class DeterminanApp {
             System.out.print("Masukkan pilihan: ");
             n = input.nextInt();
         }
+        String[] s = new String[1]; // Declare an array of strings with one element
         if (n == 1) {
             System.out.println("Determinan matriks menggunakan kofaktor: " + Determinan.detKof(retmat));
+            s[0] = "Determinan matriks menggunakan kofaktor: " + Determinan.detKof(retmat);
         } else {
             System.out.println("Determinan matriks menggunakan reduksi baris: " + Determinan.detReduksi(retmat));
+            s[0] = "Determinan matriks menggunakan reduksi baris: " + Determinan.detReduksi(retmat);
         }
+        Utils.solutionToFile(s);
 
     }
 
