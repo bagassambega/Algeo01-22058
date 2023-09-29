@@ -89,6 +89,14 @@ public class Matrix {
         return num.doubleValue();
     }
 
+    public void roundMatrix(int n) {
+        for (int i = 0; i < this.row; i++) {
+            for (int j = 0; j < this.col - 1; j++) {
+                this.matrix[i][j] = round2(this.matrix[i][j], n);
+            }
+        }
+    }
+
 
 
     public Matrix multiplyMatrix(Matrix m1, Matrix m2) {

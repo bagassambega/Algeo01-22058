@@ -171,19 +171,11 @@ public class Main {
         Matrix matriks = InputMatrix(1);
         if (SPLchoicenum == 1) {
             SPL.CreateMatrixEselon(matriks, 1);
-            for (int l = 0; l < matriks.row; l++) {
-                for (int k = 0; k < matriks.col; k++) { // Rounding hasil
-                    matriks.matrix[l][k] = matriks.round2(matriks.matrix[l][k], 4);
-                }
-            }
+            matriks.roundMatrix(4);
             SPL.solveSPLEchelon(matriks, 1);
         } else if (SPLchoicenum == 2) {
             SPL.CreateMatrixEselon(matriks, 1);
-            for (int l = 0; l < matriks.row; l++) {
-                for (int k = 0; k < matriks.col; k++) { // Rounding hasil
-                    matriks.matrix[l][k] = matriks.round2(matriks.matrix[l][k], 4);
-                }
-            }
+            matriks.roundMatrix(4);
             if (SPL.checkSolveType(matriks, 1) == -1) {
                 System.out.println("Tidak ada solusi yang memenuhi.");
             } else if (SPL.checkSolveType(matriks, 1) == 1) {
