@@ -1,14 +1,14 @@
 import java.util.*;
 
 import Aplikasi.InterPolinom;
+import Aplikasi.RLB;
 import matrix.*;
 import java.io.*;
-import java.lang.*;
 
 public class Main {
+
     public static void main(String[] args) {
         boolean mainLoop = true;
-
         while (mainLoop) {
             System.out.println("Selamat datang di program kalkulator matriks!");
             Scanner inputMain = new Scanner(System.in);
@@ -21,39 +21,34 @@ public class Main {
             System.out.println("7. Keluar");
             System.out.print("Pilih operasi yang ingin dilakukan: ");
             int choice = inputMain.nextInt();
-
-
             if (choice == 1) {
                 SPL();
-            }
-            else if (choice == 2) {
+            } else if (choice == 2) {
                 MainDeterminant();
-            }
-            else if (choice == 4) {
+            } else if (choice == 4) {
                 InterpolasiLinear();
-            }
-            else if (choice == 7) {
+            } else if (choice == 5) {
+                RLB.menu();
+            } else if (choice == 7) {
                 System.out.println("Terima kasih telah menggunakan program ini!");
                 mainLoop = false;
-            }
-            else {
+            } else {
                 System.out.println("Input tidak valid!");
             }
             System.out.print("\n \n");
         }
     }
 
-
     public static Matrix InputMatrix(int choice) {
-        // choice untuk menentukan apakah matriks yang diimasukkan harus matriks persegi atau bukan
+        // choice untuk menentukan apakah matriks yang diimasukkan harus matriks persegi
+        // atau bukan
         Scanner inputMatrix = new Scanner(System.in);
         System.out.print("Masukkan matrix melalui terminal (1) atau file (2)?: ");
         int InputMatrixChoice = inputMatrix.nextInt();
         while (true) {
             if (InputMatrixChoice == 1 || InputMatrixChoice == 2) {
                 break;
-            }
-            else {
+            } else {
                 System.out.println("Input tidak valid!");
                 System.out.print("Masukkan matrix melalui terminal (1) atau file (2)?: ");
                 InputMatrixChoice = inputMatrix.nextInt();
@@ -66,7 +61,7 @@ public class Main {
                 Scanner inputRow = new Scanner(System.in);
                 Scanner inputCol = new Scanner(System.in);
                 int row = 0, col = 0;
-                if (choice == 1) { //  SPL
+                if (choice == 1) { // SPL
                     System.out.print("Masukkan jumlah variabel dalam persamaan: ");
                     col = inputCol.nextInt();
                     System.out.print("Masukkan jumlah persamaan: ");
@@ -80,8 +75,7 @@ public class Main {
                     }
                     col += 1; // Agar bisa memasukkan hasil persamaan ke kolom paling akhir
                     System.out.println("Masukkan persamaan (Baca README untuk penulisan): ");
-                }
-                else if ((choice == 2) || (choice == 3)) { // Determinan/Invers, matriks persegi
+                } else if ((choice == 2) || (choice == 3)) { // Determinan/Invers, matriks persegi
                     System.out.print("Masukkan banyak kolom matriks: ");
                     col = inputCol.nextInt();
                     System.out.print("Masukkan banyak baris matriks: ");
@@ -94,8 +88,7 @@ public class Main {
                         row = inputRow.nextInt();
                     }
                     System.out.println("Masukkan matrix (Baca README untuk penulisan): ");
-                }
-                else if (choice == 4) { // Interpolasi linear
+                } else if (choice == 4) { // Interpolasi linear
                     System.out.print("Berapa derajat polinom yang dicari? ");
                     row = inputRow.nextInt();
                     while (row <= 0) {
@@ -104,7 +97,8 @@ public class Main {
                         row = inputRow.nextInt();
                     }
                     row += 1;
-                    col = row + 1; // Karena berbentuk persamaan, maka diperlukan kolom baru untuk menulis hasil f(x)
+                    col = row + 1; // Karena berbentuk persamaan, maka diperlukan kolom baru untuk menulis hasil
+                                   // f(x)
                     Matrix matInterpol = new Matrix(row, col);
                     return matInterpol;
                 }
@@ -150,15 +144,13 @@ public class Main {
             fileInput.close();
             bufferedReader.close();
             return Arrayline.length;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.err.println(e);
             return 0;
         }
     }
 
     public static void SPL() {
-        // Ingat pada SPL ada 1 kolom tambahan sebagai hasil
         System.out.println("\n==========SPL==========");
         System.out.println("1. Metode eliminasi Gauss");
         System.out.println("2. Metode eliminasi Gauss-Jordan");
@@ -172,8 +164,7 @@ public class Main {
                 System.out.println("Input tidak valid!");
                 System.out.print("Masukkan jenis penyelesaian SPL: ");
                 SPLchoicenum = SPLchoice.nextInt();
-            }
-            else {
+            } else {
                 break;
             }
         }
@@ -181,29 +172,25 @@ public class Main {
         if (SPLchoicenum == 1) {
             SPL.CreateMatrixEselon(matriks, 1);
             SPL.solveSPLEchelon(matriks, 1);
-        }
-        else if (SPLchoicenum == 2) {
+        } else if (SPLchoicenum == 2) {
             SPL.CreateMatrixEselon(matriks, 1);
             if (SPL.checkSolveType(matriks, 1) == -1) {
                 System.out.println("Tidak ada solusi yang memenuhi.");
-            }
-            else if (SPL.checkSolveType(matriks, 1) == 1) {
+            } else if (SPL.checkSolveType(matriks, 1) == 1) {
                 SPL.parametricSol(matriks);
-            }
-            else {
+            } else {
                 SPL.CreateMatrixEselonReduced(matriks);
                 if (SPL.checkSolveType(matriks, 1) == -1) {
                     System.out.println("Tidak ada solusi yang memenuhi.");
-                }
-                else if (SPL.checkSolveType(matriks, 1) == 1) {
+                } else if (SPL.checkSolveType(matriks, 1) == 1) {
                     SPL.parametricSol(matriks);
-                }
-                else {
+                } else {
                     SPL.solveSPLReduced(matriks);
                 }
             }
+        } else if (SPLchoicenum == 4) {
+            SPL.CramerSolver(matriks);
         }
-        // Lanjut metode lain sampai 4
     }
 
     public static void MainDeterminant() {
@@ -225,8 +212,6 @@ public class Main {
         }
     }
 
-
-
     public static void InterpolasiLinear() {
         System.out.println("\n==========INTERPOLASI LINEAR============");
         Matrix interpol = InputMatrix(4); // 4 adalah untuk interpolasi linear
@@ -239,14 +224,13 @@ public class Main {
             if (c.equals("Y") || c.equals("y")) {
                 System.out.print("Masukkan nilai yang ingin diaproksimasi: ");
                 double val = n.nextDouble();
-                System.out.printf("f(%f) = %f\n", val, InterPolinom.approxValue(InterPolinom.saveEqInArr(interpol), val));
+                System.out.printf("f(%f) = %f\n", val,
+                        InterPolinom.approxValue(InterPolinom.saveEqInArr(interpol), val));
                 System.out.print("Apakah ingin input nilai lagi? ");
                 c = n.next();
-            }
-            else if (c.equals("N") || c.equals("n")) {
+            } else if (c.equals("N") || c.equals("n")) {
                 break;
-            }
-            else {
+            } else {
                 System.out.println("Input tidak valid");
             }
         }
