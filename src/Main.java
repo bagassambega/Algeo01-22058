@@ -1,10 +1,11 @@
 import java.util.*;
 
+import Aplikasi.DeterminanApp;
 import Aplikasi.InterPolinom;
 import Aplikasi.RLB;
 import matrix.*;
 import java.io.*;
-
+import Utils.Utils;
 public class Main {
 
     public static void main(String[] args) {
@@ -24,7 +25,7 @@ public class Main {
             if (choice == 1) {
                 SPL();
             } else if (choice == 2) {
-                MainDeterminant();
+                DeterminanApp.menu();;
             } else if (choice == 4) {
                 InterpolasiLinear();
             } else if (choice == 5) {
@@ -54,6 +55,7 @@ public class Main {
                 InputMatrixChoice = inputMatrix.nextInt();
             }
         }
+        inputMatrix.close();
 
         switch (InputMatrixChoice) { // Menentukan bentuk matriks yang dimasukkan
             case 1:
@@ -112,43 +114,17 @@ public class Main {
                 System.out.print("Masukkan path file (relatif terhadap folder test): ");
                 String filePath = inputFilename.nextLine();
                 filePath = "../test/" + filePath;
-                Matrix matFile = new Matrix(getRowFile(filePath), getColFile(filePath, getRowFile(filePath)));
+                Matrix matFile = new Matrix(Utils.getRowFile(filePath), Utils.getColFile(filePath, Utils.getRowFile(filePath)));
                 matFile.readMatrixFile(filePath);
                 return matFile;
             default:
                 System.out.println("Input tidak valid!");
                 return new Matrix(0, 0);
         }
+        
     }
 
-    public static int getRowFile(String filename) {
-        int row = 0;
-        try (FileReader fileInput = new FileReader(filename)) {
-            BufferedReader bufferedReader = new BufferedReader(fileInput);
-            while (bufferedReader.readLine() != null) {
-                row++;
-            }
-            fileInput.close();
-            bufferedReader.close();
-        } catch (IOException e) {
-            System.err.println(e);
-        }
-        return row;
-    }
-
-    public static int getColFile(String filename, int row) {
-        try (FileReader fileInput = new FileReader(filename)) {
-            BufferedReader bufferedReader = new BufferedReader(fileInput);
-            StringBuilder line = new StringBuilder(bufferedReader.readLine());
-            String[] Arrayline = line.toString().split(" ");
-            fileInput.close();
-            bufferedReader.close();
-            return Arrayline.length;
-        } catch (IOException e) {
-            System.err.println(e);
-            return 0;
-        }
-    }
+    
 
     public static void SPL() {
         System.out.println("\n==========SPL==========");
@@ -195,24 +171,7 @@ public class Main {
         }
     }
 
-    public static void MainDeterminant() {
-        System.out.println("\n==========Determinan Matriks==========");
-        System.out.println("1. Metode kofaktor");
-        System.out.println("2. Metode reduksi baris");
-        Scanner MainDeterminantChoice = new Scanner(System.in);
-        System.out.print("Masukkan pilihan: ");
-        int n = MainDeterminantChoice.nextInt();
-        while (n < 1 || n > 3) {
-            System.out.println("Masukkan input yang valid!");
-            System.out.print("Masukkan pilihan: ");
-            n = MainDeterminantChoice.nextInt();
-        }
-
-        Matrix matrix = InputMatrix(2); // 2 adalah untuk determinan matriks
-        if (n == 1) {
-            System.out.println("Determinan matriks menggunakan kofaktor: " + Determinan.detKof(matrix));
-        }
-    }
+    
 
     public static void InterpolasiLinear() {
         System.out.println("\n==========INTERPOLASI LINEAR============");

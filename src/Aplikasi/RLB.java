@@ -156,7 +156,7 @@ public class RLB {
             }
 
         }
-        retmatrix.printMatrix();
+
         SPL.CreateMatrixEselon(retmatrix, 1);
         if (SPL.checkSolveType(retmatrix, 1) == 1 || SPL.checkSolveType(retmatrix, 1) == -1) {
             return null;

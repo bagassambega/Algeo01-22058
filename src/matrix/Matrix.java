@@ -18,7 +18,6 @@ public class Matrix {
         this.matrix = new double[this.row][this.col];
     }
 
-
     public double getElmt(int i, int j) {
         return this.matrix[i][j];
     }
@@ -36,22 +35,21 @@ public class Matrix {
             BufferedReader bufferedReader = new BufferedReader(fileInput);
             int row = 0;
             String line;
-            while ( (line = bufferedReader.readLine()) != null) {
+            while ((line = bufferedReader.readLine()) != null) {
                 String[] lineArray = line.split(" ");
                 for (int i = 0; i < lineArray.length; i++) {
+
                     this.matrix[row][i] = Double.parseDouble(lineArray[i]);
                 }
                 row++;
             }
             fileInput.close();
             bufferedReader.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("File tidak ditemukan/error!");
             System.err.println(e);
         }
     }
-
 
     public void printMatrix() {
         System.out.print("[");
@@ -71,8 +69,6 @@ public class Matrix {
         System.out.println("]");
     }
 
-
-
     public void roundElmtMatrix(int n) {
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.col - 1; j++) {
@@ -81,7 +77,6 @@ public class Matrix {
             }
         }
     }
-
 
     public double round2(double value, int n) { // Last rounding
         BigDecimal bd = new BigDecimal(value).setScale(n, RoundingMode.HALF_UP);
@@ -97,8 +92,6 @@ public class Matrix {
         }
     }
 
-
-
     public Matrix multiplyMatrix(Matrix m1, Matrix m2) {
         Matrix m3 = new Matrix(m1.row, m2.col);
         for (int i = 0; i < m1.row; i++) {
@@ -111,7 +104,5 @@ public class Matrix {
         }
         return m3;
     }
-
-
 
 }
