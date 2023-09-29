@@ -81,11 +81,9 @@ public class Matrix {
             }
         }
     }
-    
 
-    
 
-    public double round2(double value, int n) {
+    public double round2(double value, int n) { // Last rounding
         BigDecimal bd = new BigDecimal(value).setScale(n, RoundingMode.HALF_UP);
         BigDecimal num = bd.round(new MathContext(n));
         return num.doubleValue();

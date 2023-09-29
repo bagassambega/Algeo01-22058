@@ -129,10 +129,12 @@ public class SPL {
                 }
                 matrix.roundElmtMatrix(10);
             }
-            System.out.println("\n");
         }
-        for (int k = 0; k < matrix.col; k++) {
-            matrix.matrix[matrix.row - 1][k] = matrix.round2(matrix.matrix[matrix.row - 1][k], 5);
+        
+        for (int l = 0; l < matrix.row; l++) {
+            for (int k = 0; k < matrix.col; k++) { // Rounding hasil
+                matrix.matrix[l][k] = matrix.round2(matrix.matrix[l][k], 5);
+            }
         }
 
         if (checkSolveType(matrix, colTambahan) != 1 || checkSolveType(matrix, colTambahan) != -1) {
@@ -184,6 +186,7 @@ public class SPL {
         for (int i = 0; i < arrayHasil.col; i++) {
             arrayHasil.matrix[0][i] = Double.NaN;
         }
+        System.out.println("Solusi parametrik persamaan: ");
 
         // Proses mencari nilai variabel tunggal yang unik
         for (int i = matrix.row - 1; i > 0; i--) {
