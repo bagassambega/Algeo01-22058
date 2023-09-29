@@ -130,7 +130,7 @@ public class SPL {
                 matrix.roundElmtMatrix(10);
             }
         }
-        
+
         for (int l = 0; l < matrix.row; l++) {
             for (int k = 0; k < matrix.col; k++) { // Rounding hasil
                 matrix.matrix[l][k] = matrix.round2(matrix.matrix[l][k], 5);
@@ -270,6 +270,72 @@ public class SPL {
 
             solution.matrix[0][row] = (matrix.matrix[row][var] - sum) / matrix.matrix[row][row];
             recursionSolve(matrix, solution, row - 1);
+        }
+    }
+
+
+    public static Matrix getEquationOnly(Matrix m) {
+        Matrix M = new Matrix(m.row, m.col - 1);
+        for (int i = 0; i <= m.row - 1; i++) {
+            for (int j = 0; j <= m.col - 2; j++) {
+                M.matrix[i][j] = m.matrix[i][j];
+            }
+        }
+        return M;
+    }
+
+    public static Matrix getAnsOnly(Matrix m) {
+        Matrix M = new Matrix(m.row, 1);
+        for (int i = 0; i <= m.row - 1; i++) {
+            M.matrix[i][0] = m.getElmt(i, 0);
+            M.matrix[i][0] = m.getElmt(i, m.col-1);
+        }
+        return M;
+
+    }
+
+
+    public static void CramerSolver(Matrix m) {
+        Matrix m1 = getAnsOnly(m);
+        if (Determinan.detKof(m) != 0) {
+            double detawal = Determinan.detKof(m);// sebagai pembagi
+            detawal = Determinan.detKof(getEquationOnly(m));// sebagai pembagi
+            for (int i = 0; i <= m.col - 2; i++) {// loop untuk interate ganti kolom ke i dengan ANS
+                Matrix m2 = getEquationOnly(m);
+                for (int j = 0; j <= m.row - 1; j++) {// algoritma ganti baris
+                    m2.matrix[j][i] = m1.matrix[j][0];
+                }
+                double det = Determinan.detKof(m2);// cari determinan setelah diganti
+                double solusi = det / detawal; // rumus kramer
+                if (i == 0) {
+                    System.out.println("Solusi persamaan adalah:");
+                }
+                System.out.printf("x%d = %f\n", i + 1, solusi);
+                System.out.printf("x%d = %.4f\n", i + 1, solusi);
+            }
+
+        } else {
+            System.out.println("Determinan == 0, maka solusi dari SPL di atas tidak unik, gunakan metode lain.");
+        }
+    }
+
+    static void inverseSPL(double mtrx[][], double constant[]){
+        int n = mtrx.length;
+        int index = 1;
+        double sum;
+        double [][]inversed = new double[n][n];
+
+        if(Inverse.inverse(mtrx, inversed))
+        {
+            for(int i = 0; i < n; i++){
+                sum = 0;
+                for(int j = 0; j < n; j++){
+                    sum += inversed[i][j] * constant[j];
+                }
+
+                System.out.printf("x%d = %.6f\n", index, sum);
+                index++;
+            }
         }
     }
 
