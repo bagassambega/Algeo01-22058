@@ -3,6 +3,8 @@ package Utils;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Utils {
     public static int getRowFile(String filename) {
@@ -33,5 +35,11 @@ public class Utils {
             return 0;
         }
     }
-    
+
+    public static double setPrec(double num, int decPlaces) {
+        BigDecimal bd = new BigDecimal(num).setScale(decPlaces, RoundingMode.HALF_UP);
+        double res = bd.doubleValue();
+        return res;
+    }
+
 }

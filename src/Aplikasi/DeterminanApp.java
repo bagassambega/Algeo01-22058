@@ -3,9 +3,9 @@ package Aplikasi;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import Utils.Utils;
-import matrix.Determinan;
-import matrix.Matrix;
+import Utils.*;
+import matrix.*;
+
 
 public class DeterminanApp {
     private static Scanner input = new Scanner(System.in);

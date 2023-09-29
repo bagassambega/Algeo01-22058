@@ -1,11 +1,8 @@
 import java.util.*;
 
-import Aplikasi.DeterminanApp;
-import Aplikasi.InterPolinom;
-import Aplikasi.RLB;
+import Aplikasi.*;
 import matrix.*;
-import java.io.*;
-import Utils.Utils;
+import Utils.*;
 public class Main {
 
     public static void main(String[] args) {
@@ -25,7 +22,7 @@ public class Main {
             if (choice == 1) {
                 SPL();
             } else if (choice == 2) {
-                DeterminanApp.menu();;
+                DeterminanApp.menu();
             } else if (choice == 4) {
                 InterpolasiLinear();
             } else if (choice == 5) {

@@ -61,6 +61,7 @@ public class Determinan {
     }
 
     public static double detReduksi(Matrix matrix) {
+        matrix.roundMatrix(4);
         double det = 1;
         for (int i = 0; i <= matrix.row - 1; i++) {// jika ada yang full 0, maka pastilah sudah determinan = 0;
             if (SPL.findIndexColFirstNonZero(matrix, i) == -1) {
@@ -99,7 +100,8 @@ public class Determinan {
             }
 
         }
-
+        matrix.roundMatrix(4);
+        
         for (int i = 0; i <= matrix.row - 1; i++) {
             det *= matrix.matrix[i][i];
         }
