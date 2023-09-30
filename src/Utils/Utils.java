@@ -44,16 +44,15 @@ public class Utils {
 
     public static double setPrec(double num, int decPlaces) {
         BigDecimal bd = new BigDecimal(num).setScale(decPlaces, RoundingMode.HALF_UP);
-        double res = bd.doubleValue();
-        return res;
+        return bd.doubleValue();
     }
 
     public static void rounding(Matrix M) {
         for (int i = 0; i <= M.row - 1; i++) {
-            for (int j = 0; j <= M.row - 1; j++) {
-                if (M.matrix[i][j] < 0.000001 || M.matrix[i][j] > -0.000001) {
+            for (int j = 0; j <= M.col - 1; j++) {
+                if (M.matrix[i][j] < 0.000001 && M.matrix[i][j] > -0.000001) {
                     M.matrix[i][j] = 0;
-                } else if (M.matrix[i][j] < 1.000001 || M.matrix[i][j] > 0.999999)
+                } else if (M.matrix[i][j] < 1.000001 && M.matrix[i][j] > 0.999999)
                     M.matrix[i][j] = 1;
             }
         }
@@ -68,7 +67,7 @@ public class Utils {
 
         switch (resp) {
             case "Y":
-                String fileName = new String();
+                String fileName;
                 System.out.print("Masukkan nama file: ");
                 fileName = input.nextLine();
                 try {
@@ -101,7 +100,7 @@ public class Utils {
 
         switch (resp) {
             case "Y":
-                String fileName = new String();
+                String fileName;
                 System.out.print("Masukkan nama file: ");
                 fileName = input.nextLine();
                 try {
@@ -200,8 +199,7 @@ public class Utils {
                     row += 1;
                     col = row + 1; // Karena berbentuk persamaan, maka diperlukan kolom baru untuk menulis hasil
                                    // f(x)
-                    Matrix matInterpol = new Matrix(row, col);
-                    return matInterpol;
+                    return new Matrix(row, col);
                 }
                 Matrix matCLI = new Matrix(row, col);
                 matCLI.readMatrixCLI(matCLI.row, matCLI.col);

@@ -5,6 +5,7 @@ import java.util.Scanner;
 import Utils.Utils;
 
 public class InterPolinom {
+
     public static void makeEq(Matrix matrix) {
         // Membuat nilai input variabel menjadi pangkat n
         System.out.printf("Masukkan pasangan nilai x dan y (Minimal %d pasangan): \n", matrix.row);

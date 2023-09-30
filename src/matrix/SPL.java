@@ -233,6 +233,7 @@ public class SPL {
         } else {
             Matrix solution = new Matrix(1, matrix.col);
             recursionSolve(matrix, solution, matrix.row - 1);
+            solution.printMatrix();
             for (int i = 0; i < matrix.row; i++) {
                 if (!Double.isFinite(solution.matrix[0][i])) {
                     System.out.println("Tidak ada solusi untuk persamaan ini.");
@@ -250,7 +251,6 @@ public class SPL {
         // Prekondisi : Matriks sudah dalam bentuk matriks eselon tereduksi (Gauss
         // Jordan)
         // Hanya untuk yang unique value
-        matrix.printMatrix();
         System.out.println("Nilai setiap variabel adalah: ");
         for (int i = 0; i < matrix.row; i++) {
             System.out.printf("X%d = %f\n", i + 1, matrix.getElmt(i, matrix.col - 1));
@@ -327,7 +327,7 @@ public class SPL {
         }
     }
 
-    public static void inverseSPL(double mtrx[][], double constant[]) {
+    public static void inverseSPL(double[][] mtrx, double[] constant) {
         int n = mtrx.length;
         int index = 1;
         double sum;
