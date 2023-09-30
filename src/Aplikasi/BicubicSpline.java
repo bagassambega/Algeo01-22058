@@ -1,3 +1,4 @@
+package Aplikasi;
 import java.util.Scanner;
 
 public class BicubicSpline{
