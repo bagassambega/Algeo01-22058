@@ -3,11 +3,49 @@ import java.util.Scanner;
 public class TestBicubicSpline {
     public static void main(String[] args)
     {
- 
-        double[][] matrix = new double[32][32];
- 
+        Scanner input = new Scanner(System.in);
+
+        double[][] matrix = new double[16][32];
+        double[][] inversed = new double[16][16];
+        double[][] constant_matrix = new double[4][4];
+        double[] constant_array = new double[16];
+        double[][] variable_array = new double [4][4];
         // Get the inverse of matrix
-        InverseOfMatrix(matrixX(matrix), 16);
+        inversed = InverseOfMatrix(matrixX(matrix), 16);
+
+        System.out.println("\nEnter matrix of constants (4x4):");
+        int idx = 0;
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++){
+                constant_matrix[i][j] = input.nextDouble();
+                constant_array[idx] = constant_matrix[i][j];
+                idx++;
+            }
+        }
+        
+        double hasil;
+        variable_array = inverseSPLBicubicSpline(inversed, constant_array);
+
+        double a,b;
+        System.out.println("Nilai A: ");
+        a = input.nextDouble();
+        System.out.println("\nNilai B: ");
+        b = input.nextDouble();
+        hasil = BicubicSplineEquation(matrixX(matrix), variable_array, a, b);
+        
+        System.out.printf("Hasil f(%f, %f) = %.6f", a, b, hasil);
+        input.close();
+    }
+
+    static double BicubicSplineEquation(double[][] mtrx, double[][] variables, double a, double b){
+        double value = 0;
+
+        for(int j = 0; j <= 3; j++){
+            for(int i = 0; i <= 3; i++){
+                value += variables[i][j] * Math.pow(a, i) * Math.pow(b, j);
+            }
+        }
+        return value;
     }
 
     static void PrintMatrix(double[][] ar, int n, int m)
@@ -38,7 +76,7 @@ public class TestBicubicSpline {
  
     // Function to perform the inverse operation on the
     // matrix.
-    static void InverseOfMatrix(double[][] matrix, int order)
+    static double[][] InverseOfMatrix(double[][] matrix, int order)
     {
         // Matrix Declaration.
  
@@ -113,13 +151,27 @@ public class TestBicubicSpline {
             }
         }
  
+        double[][] inverse_matrix = new double[16][16];
+        int temp_col = 0;
+
+        for(int i = 0; i < 16; i++){
+            temp_col = 0;
+            for(int j = 16; j < 32; j++){
+                inverse_matrix[i][temp_col] = matrix[i][j];
                 
- 
+                if(inverse_matrix[i][temp_col] == -0){
+                    inverse_matrix[i][temp_col] = 0.000000;
+                }
+
+                temp_col++;
+            }
+        }
+
         // print the resultant Inverse matrix.
         System.out.println("\n=== Inverse Matrix ===");
-        PrintInverse(matrix, order, 2 * order);
+        display(inverse_matrix);
  
-        return;
+        return inverse_matrix;
     }
 
     static double[][] matrixX (double A[][]){
@@ -212,40 +264,32 @@ public class TestBicubicSpline {
         }
     }
 
-    static void inverseSPLBicubicSpline(double inversed[][], double constant[]){
-        int index = 1;
+    static double[][] inverseSPLBicubicSpline(double inversed[][], double constant[]){
         double sum;
 
+        double[][] variable = new double[4][4];
+        int variable_row = 0;
+        int variable_col = 0;
+
+        int n = inversed.length;
         for(int i = 0; i < n; i++){
             sum = 0;
+            if(variable_row > 3){
+                    variable_col++;
+                    variable_row = 0;
+                }
+
             for(int j = 0; j < n; j++){
                 sum += inversed[i][j] * constant[j];
             }
 
-            System.out.printf("x%d = %.6f\n", index, sum);
-            index++;
+            variable[variable_row][variable_col] = sum;
+            variable_row++;
         }
+
+        System.out.println("Matrix variable");
+        display(variable);
+
+        return variable;
     }
 }
-/*
- https://matrix.reshish.com/inverse.php
- https://www.geeksforgeeks.org/finding-inverse-of-a-matrix-using-gauss-jordan-method/
- https://www.mssc.mu.edu/~daniel/pubs/RoweTalkMSCS_BiCubic.pdf
- 
-1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
-0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0
--3	3	0	0	-2	-1	0	0	0	0	0	0	0	0	0	0
-2	-2	0	0	1	1	0	0	0	0	0	0	0	0	0	0
-0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0
-0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0
-0	0	0	0	0	0	0	0	-3	3	0	0	-2	-1	0	0
-0	0	0	0	0	0	0	0	2	-2	0	0	1	1	0	0
--3	0	3	0	0	0	0	0	-2	0	-1	0	0	0	0	0
-0	0	0	0	-3	0	3	0	0	0	0	0	-2	0	-1	0
-9	-9	-9	9	6	3	-6	-3	6	-6	3	-3	4	2	2	1
--6	6	6	-6	-3	-3	3	3	-4	4	-2	2	-2	-2	-1	-1
-2	0	-2	0	0	0	0	0	1	0	1	0	0	0	0	0
-0	0	0	0	2	0	-2	0	0	0	0	0	1	0	1	0
--6	6	6	-6	-4	-2	4	2	-3	3	-3	3	-2	-1	-2	-1
-4	-4	-4	4	2	2	-2	-2	2	-2	2	-2	1	1	1	1
-*/
