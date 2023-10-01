@@ -23,6 +23,8 @@ public class Main {
                 SPLApp.Menu();
             } else if (choice == 2) {
                 DeterminanApp.menu();
+            } else if (choice == 3) {
+                InverseApp.menu();
             } else if (choice == 4) {
                 InterPolinom.Menu();
             } else if (choice == 5) {

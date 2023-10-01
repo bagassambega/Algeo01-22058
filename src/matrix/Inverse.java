@@ -1,5 +1,7 @@
 package matrix;
 import java.util.Scanner;
+import Aplikasi.*;
+import Utils.*;
  
 public class Inverse 
 {
@@ -54,15 +56,12 @@ public class Inverse
     static void adjoint(double[][] A, double [][]adj)
     {
         int N = A.length;
-
         if (N == 1)
         {
             adj[0][0] = 1;
             return;
         }
-    
         int sign = 1;
-    
         for (int i = 0; i < N; i++)
         {
             for (int j = 0; j < N; j++)
@@ -103,4 +102,34 @@ public class Inverse
             System.out.println();
         }
     }
+
+    static void inverseGaussJordan(Matrix matrix) {
+        double det = determinant(matrix.matrix);
+        if (det == 0) {
+            System.out.println("Matrix tidak memiliki invers.");
+            return;
+        }
+        else {
+            SPL.CreateMatrixEselon(matrix, 3);
+            Utils.rounding(matrix);
+            if (SPL.checkSolveType(matrix, 3) == -1 || SPL.checkSolveType(matrix, 3) == 1) {
+                System.out.println("Matrix tidak memiliki invers.");
+            }
+            else {
+                SPL.CreateMatrixEselonReduced(matrix, 3);
+                if (SPL.checkSolveType(matrix, 3) == -1 || SPL.checkSolveType(matrix, 3) == 1) {
+                    System.out.println("Matriks tidak memiliki invers.");
+                }
+                else {
+                    System.out.println("Invers matriks adalah: ");
+                    Matrix result = new Matrix(matrix.row, matrix.col / 2);
+                    for (int i = 0; i < result.row; i++) {
+                        System.arraycopy(matrix.matrix[i], matrix.row / 2 - 1, result.matrix[i], 0, result.col);
+                    }
+                }
+            }
+        }
+    }
+
+
 }

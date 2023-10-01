@@ -1,6 +1,7 @@
 package matrix;
 
 import java.lang.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class SPL {
@@ -140,8 +141,6 @@ public class SPL {
                     }
                 }
                 matrix.roundElmtMatrix(10);
-                matrix.printMatrix();
-                System.out.println("===============");
             }
         }
 
@@ -160,13 +159,13 @@ public class SPL {
         }
     }
 
-    public static void CreateMatrixEselonReduced(Matrix matrix) {
+    public static void CreateMatrixEselonReduced(Matrix matrix, int coltambahan) {
         // Prekondisi: sudah dilakukan CreateMatrixEselon sebelumnya, jadi diagonalnya
         // sudah 1
         // Sudah dicek apakah ada baris 0 semua (pakai fungsi checkInMatrixAllZero)
         for (int i = matrix.row - 2; i >= 0; i--) {
             // i = 1; j = 2
-            for (int j = matrix.col - 2; j > i; j--) {
+            for (int j = matrix.col - coltambahan - 1; j > i; j--) {
                 if (matrix.getElmt(i, j) != 0) {
                     double pengali = matrix.getElmt(i, j) / matrix.getElmt(j, j);
                     kaliRow(matrix, pengali, j);
@@ -174,8 +173,10 @@ public class SPL {
                     bagiRow(matrix, pengali, j);
                 }
             }
+            if (findIndexColFirstNonZero(matrix, i) == -1 || findIndexColFirstNonZero(matrix, i) == matrix.col - coltambahan) {
+                break;
+            }
         }
-
     }
 
     public static int nZero(Matrix matrix, int row, int colTambahan) {
@@ -195,7 +196,6 @@ public class SPL {
                 // Mencari angka 1 di setiap baris
                 if (matrix.matrix[i][j] == 1) {
                     double pengali;
-
                     while (i >= 1) {
                         pengali = matrix.matrix[i - 1][j];
                         double nilai;
@@ -217,10 +217,9 @@ public class SPL {
         // Inisialisasi arrayHasil dengan NaN dan stringHasil dengan ""
         for (int i = 0; i < arrayHasil.length; i++) {
             arrayHasil[i] = Double.NaN;
-            stringHasil[i] = "";
+            stringHasil[i] = " ";
         }
 
-        System.out.println("Solusi parametrik persamaan: ");
         CreateReducedParametric(matrix);
 
         // Mencari banyaknya row yang isinya 0
@@ -232,7 +231,6 @@ public class SPL {
         }
 
         Matrix without0 = new Matrix(row, matrix.col);
-
         int row0 = 0; // Proses menghilangkan baris yang semuanya adalah 0
         for (int i = 0; i < matrix.row; i++) {
             if (findIndexColFirstNonZero(matrix, i) != -1) {
@@ -240,9 +238,6 @@ public class SPL {
                 row0++;
             }
         }
-        System.out.println("Reduced: ");
-        without0.printMatrix();
-
 
         // Proses mencari nilai variabel tunggal yang unik
         for (int i = without0.row - 1; i >= 0; i--) {
@@ -251,7 +246,6 @@ public class SPL {
                         / without0.matrix[i][findIndexColFirstNonZero(without0, i)];
             }
         }
-        System.out.println("Solusi parametrik: ");
 
         // Proses copy nilai unik yang sudah ada ke stringhasil
         for (int i = 0; i < stringHasil.length; i++) {
@@ -261,85 +255,69 @@ public class SPL {
         }
 
 
-
         // Proses mencari nilai parameter (sisanya berbentuk parametrik semua)
         int param = 1;
-        int id = 0;
-        int check = 0; // Untuk menghindari infinite loop
-        while (check < 300) {
-            for (int i = without0.row - 1; i >= 0; i--) {
-                double res = matrix.matrix[i][matrix.col - 1]; // Ambil result dari kolom paling akhir
-                double sum = 0;
-                // Substitusi nilai variabel yang sudah diketahui ke persamaan
-                for (int j = 0; j < matrix.col - 2; j++) {
-                    if (Double.isFinite(arrayHasil[j])) {
-                        sum += arrayHasil[j] * without0.matrix[i][j];
-                        without0.matrix[i][j] = Double.NaN;
+        for (int i = without0.row - 1; i >= 0; i--) {
+            double res = without0.matrix[i][matrix.col - 1]; // Ambil result dari kolom paling akhir
+            double sum = 0;
+            // Substitusi nilai variabel yang sudah diketahui ke persamaan
+            for (int j = 0; j < matrix.col - 2; j++) {
+                if (Double.isFinite(arrayHasil[j])) {
+                    sum += arrayHasil[j] * without0.matrix[i][j];
+                }
+            }
+            res -= sum;
+
+            for (int j = arrayHasil.length - 1; j >= 0; j--) {
+                int numvar = 0; // Cek apakah variabel terakhir di baris itu atau bukan
+                for (int k = 0; k < stringHasil.length; k++) {
+                    if (Double.isNaN(arrayHasil[k]) && without0.matrix[i][k] != 0) {
+                        numvar++;
                     }
                 }
-                res -= sum;
-                String var = "";
 
-                for (int j = arrayHasil.length - 1; j >= 0; j--) {
-                    int numvar = 0; // Cek apakah variabel terakhir di baris itu atau bukan
-                    for (int k = j; k < arrayHasil.length; k++) {
-                        if (Double.isNaN(arrayHasil[k])) {
-                            numvar++;
-                        }
-                    }
+                // Membuat variabel baru jika tidak ada kaitan dengan parameter lain
+                if (Double.isNaN(arrayHasil[j]) && without0.matrix[i][j] != 0 && numvar != 1) {
+                    stringHasil[j] = "t" + param;
+                    param++;
+                    arrayHasil[j] = Double.NEGATIVE_INFINITY; // Sebagai tanda kalau pengecekan var itu sudah selesai
+                }
 
-                    // Membuat variabel baru jika tidak ada kaitan dengan parameter lain
-                    if (Double.isNaN(arrayHasil[j]) && without0.matrix[i][j] != 0 && numvar != 1) {
-                        stringHasil[j] = "t" + param;
-                        param++;
-                        arrayHasil[j] = Double.NEGATIVE_INFINITY; // Sebagai tanda kalau pengecekan var itu sudah selesai
-                    }
-
-                    // Membuat variabel paling akhir yang berkorelasi dengan variabel lain
-                    if (numvar == 1 && Double.isNaN(arrayHasil[j])) {
-                        stringHasil[findIndexColFirstNonZero(without0, i)] = "(" + Double.toString(res);
-                        arrayHasil[findIndexColFirstNonZero(without0, i)] = Double.NEGATIVE_INFINITY;
-                        for (int k = findIndexColFirstNonZero(without0, i) + 1; k < arrayHasil.length; k++) {
-                            if (without0.matrix[i][k] != 0) {
-                                stringHasil[findIndexColFirstNonZero(without0, i)] += " - ";
-                                if (without0.matrix[i][k] == 1) {
-                                    stringHasil[findIndexColFirstNonZero(without0, i)] += stringHasil[k];
-                                }
-                                else {
-                                    stringHasil[findIndexColFirstNonZero(without0, i)] += Double.toString(without0.matrix[i][k]) + "*" + stringHasil[k];
-                                }
+                // Membuat variabel paling akhir yang berkorelasi dengan variabel lain
+                if (numvar == 1 && Double.isNaN(arrayHasil[findIndexColFirstNonZero(without0, i)])) {
+                    stringHasil[findIndexColFirstNonZero(without0, i)] = "(" + res;
+                    arrayHasil[findIndexColFirstNonZero(without0, i)] = Double.NEGATIVE_INFINITY;
+                    for (int k = findIndexColFirstNonZero(without0, i) + 1; k < arrayHasil.length; k++) {
+                        if (without0.matrix[i][k] != 0) {
+                            stringHasil[findIndexColFirstNonZero(without0, i)] += " - ";
+                            if (without0.matrix[i][k] == 1) {
+                                stringHasil[findIndexColFirstNonZero(without0, i)] += stringHasil[k];
+                            }
+                            else {
+                                stringHasil[findIndexColFirstNonZero(without0, i)] += without0.matrix[i][k] + "*" + stringHasil[k];
                             }
                         }
-                        if (without0.matrix[i][findIndexColFirstNonZero(without0, i)] != 1) {
-                            stringHasil[findIndexColFirstNonZero(without0, i)] += " / " + Double.toString(without0.matrix[i][findIndexColFirstNonZero(without0, i)]);
-                        }
-                        stringHasil[findIndexColFirstNonZero(without0, i)] += ")";
                     }
-
-                    // Membuat parameter yang memiliki kaitan dengan variabel lain
-
+                    if (without0.matrix[i][findIndexColFirstNonZero(without0, i)] != 1) {
+                        stringHasil[findIndexColFirstNonZero(without0, i)] += " / " + without0.matrix[i][findIndexColFirstNonZero(without0, i)];
+                    }
+                    stringHasil[findIndexColFirstNonZero(without0, i)] += ")";
                 }
             }
-
-
-            id++;
-            check++;
-            if (id >= matrix.row) {
-                id = 0;
-            }
         }
+
 
 
         // Jika memang pada dasarnya variabel tidak perlu dimasukkan tapi malah dimasukkan oleh pengguna
         for (int i = 0; i < stringHasil.length; i++) {
-            if (Objects.equals(stringHasil[i], "")) {
+            if (Objects.equals(stringHasil[i], " ")) {
                 stringHasil[i] = "t" + param;
             }
         }
-
-        System.out.println(Arrays.toString(stringHasil));
-
-
+        System.out.println("Solusi akhir: ");
+        for (int k = 0; k < stringHasil.length; k++) {
+            System.out.printf("X%d = %s\n", k + 1, stringHasil[k]);
+        }
     }
 
     public static void solveSPLEchelon(Matrix matrix, int colTambahan) {

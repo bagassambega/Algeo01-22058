@@ -5,7 +5,6 @@ import java.util.Scanner;
 import Utils.Utils;
 import matrix.Matrix;
 import matrix.SPL;
-import java.io.*;
 
 public class SPLApp {
     private static Scanner input = new Scanner(System.in);
@@ -42,7 +41,7 @@ public class SPLApp {
             } else if (SPL.checkSolveType(matriks, 1) == 1) {
                 SPL.parametricSol(matriks);
             } else {
-                SPL.CreateMatrixEselonReduced(matriks);
+                SPL.CreateMatrixEselonReduced(matriks, 1);
                 if (SPL.checkSolveType(matriks, 1) == -1) {
                     System.out.println("Tidak ada solusi yang memenuhi.");
                 } else if (SPL.checkSolveType(matriks, 1) == 1) {
@@ -51,7 +50,12 @@ public class SPLApp {
                     SPL.solveSPLReduced(matriks);
                 }
             }
-        } else if (SPLchoicenum == 4) {
+        }
+        else if (SPLchoicenum == 3) {
+            SPL.inverseSPL(matriks.matrix, new double[12]);
+
+        }
+        else {
             String[] s = new String[matriks.row + 1];
             SPL.CramerSolver(matriks, s);
             Utils.solutionToFile(s);

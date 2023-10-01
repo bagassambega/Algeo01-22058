@@ -169,7 +169,7 @@ public class RLB {
         if (SPL.checkSolveType(retmatrix, 1) == 1 || SPL.checkSolveType(retmatrix, 1) == -1) {
             return null;
         } else {
-            SPL.CreateMatrixEselonReduced(retmatrix);
+            SPL.CreateMatrixEselonReduced(retmatrix, 1);
             return retmatrix;
         }
 

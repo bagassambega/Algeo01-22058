@@ -59,7 +59,7 @@ public class Utils {
 
     }
 
-    public static void solutionToFile(String s[]) {
+    public static void solutionToFile(String[] s) {
         System.out.println();
 
         System.out.print("Apakah Anda ingin menyimpan hasil ke dalam sebuah file (Y/N)? ");

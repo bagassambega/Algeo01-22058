@@ -85,7 +85,7 @@ public class BicubicSpline{
         return inverse_matrix;
     }
 
-    static double[][] matrixX (double A[][]){
+    static double[][] matrixX (double[][] A){
         //baris 1-4
         //(0, 0) -> (1, 0) -> (0, 1) -> (1,1)
         int row = 0;
@@ -163,7 +163,7 @@ public class BicubicSpline{
         return A;
     }
 
-    static double[][] inverseSPLBicubicSpline(double inversed[][], double constant[]){
+    static double[][] inverseSPLBicubicSpline(double[][] inversed, double[] constant){
         double sum;
 
         double[][] variable = new double[4][4];

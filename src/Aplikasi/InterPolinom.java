@@ -34,7 +34,7 @@ public class InterPolinom {
             System.out.println("Tidak ada persamaan yang memenuhi.");
         }
         else {
-            SPL.CreateMatrixEselonReduced(matrix);
+            SPL.CreateMatrixEselonReduced(matrix, 1);
             if (SPL.checkSolveType(matrix, 1) == -1 || SPL.checkSolveType(matrix, 1) == 1) {
                 System.out.println("Tidak ada persamaan yang memenuhi.");
             }
