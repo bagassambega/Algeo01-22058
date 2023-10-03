@@ -391,15 +391,16 @@ public class SPL {
     public static void CramerSolver(Matrix m, String[] s) {
         s[1] = "";
         Matrix m1 = getAnsOnly(m);
-        if (Determinan.detKof(m) != 0) {
-            double detawal = Determinan.detKof(m);// sebagai pembagi
-            detawal = Determinan.detKof(getEquationOnly(m));// sebagai pembagi
+
+        if (Determinan.detReduksi(m) != 0) {
+            double detawal = Determinan.detReduksi(m);// sebagai pembagi
+            detawal = Determinan.detReduksi(getEquationOnly(m));// sebagai pembagi
             for (int i = 0; i <= m.col - 2; i++) {// loop untuk interate ganti kolom ke i dengan ANS
                 Matrix m2 = getEquationOnly(m);
                 for (int j = 0; j <= m.row - 1; j++) {// algoritma ganti baris
                     m2.matrix[j][i] = m1.matrix[j][0];
                 }
-                double det = Determinan.detKof(m2);// cari determinan setelah diganti
+                double det = Determinan.detReduksi(m2);// cari determinan setelah diganti
                 double solusi = det / detawal; // rumus kramer
                 if (i == 0) {
                     System.out.println("Solusi persamaan adalah:");

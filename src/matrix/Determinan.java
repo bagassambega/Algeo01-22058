@@ -1,5 +1,6 @@
 package matrix;
 
+import Utils.*;
 public class Determinan {
 
     public static Matrix submatrix(Matrix matrix, int idxbaris, int idxkolom) {
@@ -61,49 +62,48 @@ public class Determinan {
     }
 
     public static double detReduksi(Matrix matrix) {
-        matrix.roundMatrix(4);
+        Matrix temp = Utils.copyMatrix(matrix);
         double det = 1;
-        for (int i = 0; i <= matrix.row - 1; i++) {// jika ada yang full 0, maka pastilah sudah determinan = 0;
-            if (SPL.findIndexColFirstNonZero(matrix, i) == -1) {
+        for (int i = 0; i <= temp.row - 1; i++) {// jika ada yang full 0, maka pastilah sudah determinan = 0;
+            if (SPL.findIndexColFirstNonZero(temp, i) == -1) {
                 return 0;
             }
         }
-        for (int i = 0; i <= matrix.row - 2; i++) {
-            for (int j = i + 1; j <= matrix.row - 1; j++) {// pastikan bahwa angka tidak 0 pertama di baris paling atas
+        for (int i = 0; i <= temp.row - 2; i++) {
+            for (int j = i + 1; j <= temp.row - 1; j++) {// pastikan bahwa angka tidak 0 pertama di baris paling atas
                 // merupakan yang paling kiri
-                if (SPL.findIndexColFirstNonZero(matrix, j) < SPL.findIndexColFirstNonZero(matrix, i)) {
-                    SPL.swapRow(matrix, i, j);
+                if (SPL.findIndexColFirstNonZero(temp, j) < SPL.findIndexColFirstNonZero(temp, i)) {
+                    SPL.swapRow(temp, i, j);
                     det *= -1;
                 }
             }
 
         }
-        for (int i = 0; i < matrix.col - 1; i++) {// iterate ke setiap kolom kecuali kol terakhir, memastikan bahwa di
+        for (int i = 0; i < temp.col - 1; i++) {// iterate ke setiap kolom kecuali kol terakhir, memastikan bahwa di
                                                   // bawah pivot yang dipilih == 0
-            if (matrix.matrix[i][i] == 0) {// jika pivot paling atas menjadi 0 karena operasi sebelumnya, maka lakukan
-                                           // pertukara
-                if (getFirstNonZeroRowIdx(matrix, i) == -1) {
+            if (temp.matrix[i][i] == 0) {// jika pivot paling atas menjadi 0 karena operasi sebelumnya, maka lakukan
+                                           // pertukaran
+                if (getFirstNonZeroRowIdx(temp, i) == -1) {
                     return 0; // jika semua dibawah pivot bernilai 0, maka dapat dipastikan det == 0
                 } else {
-                    SPL.swapRow(matrix, i, getFirstNonZeroRowIdx(matrix, i));
+                    SPL.swapRow(temp, i, getFirstNonZeroRowIdx(temp, i));
                 } // jika tidak, tukar dengan baris yang memiliki angka
             }
-            for (int j = i + 1; j <= matrix.row - 1; j++) {// eliminasi angka dibawah pivot
-                if (matrix.matrix[j][i] != 0) {
-                    double pengali = matrix.getElmt(j, i) / matrix.getElmt(i, i);
-                    SPL.kaliRow(matrix, pengali, i);
-                    SPL.kurangRow(matrix, j, i);
-                    SPL.bagiRow(matrix, pengali, i);
+            for (int j = i + 1; j <= temp.row - 1; j++) {// eliminasi angka dibawah pivot
+                if (temp.matrix[j][i] != 0) {
+                    double pengali = temp.getElmt(j, i) / temp.getElmt(i, i);
+                    SPL.kaliRow(temp, pengali, i);
+                    SPL.kurangRow(temp, j, i);
+                    SPL.bagiRow(temp, pengali, i);
 
                 }
 
             }
 
         }
-        matrix.roundMatrix(4);
         
-        for (int i = 0; i <= matrix.row - 1; i++) {
-            det *= matrix.matrix[i][i];
+        for (int i = 0; i <= temp.row - 1; i++) {
+            det *= temp.matrix[i][i];
         }
         return det;
     }

@@ -3,7 +3,7 @@ package matrix;
 import java.math.*;
 import java.util.*;
 import java.io.*;
-import java.lang.*;
+import Utils.*;
 import java.text.DecimalFormat;
 
 public class Matrix {
@@ -36,10 +36,15 @@ public class Matrix {
             int row = 0;
             String line;
             while ((line = bufferedReader.readLine()) != null) {
+
                 String[] lineArray = line.split(" ");
                 for (int i = 0; i < lineArray.length; i++) {
-
-                    this.matrix[row][i] = Double.parseDouble(lineArray[i]);
+                    try 
+                    {this.matrix[row][i] = Utils.toDouble(lineArray[i]);}
+                    catch (Exception e){
+                        System.out.print("Terdapat kesalahan input pada file txt, silahkan ulangi kembali program dan ubah file yang ada!");
+                        System.exit(0);
+                    }
                 }
                 row++;
             }

@@ -1,6 +1,6 @@
 import java.util.*;
 
-import matrix.SPL;
+import matrix.*;
 
 public class TestInverse
 {
