@@ -61,21 +61,24 @@ public class DeterminanApp {
 
             while (!validFilePath) {
                 try {
-                    System.out.print("Masukkan path file (relatif terhadap folder test): ");
+                    System.out.print("Masukkan path file (relatif terhadap folder test) : ");
                     filePath = input.nextLine();
                     filePath = "../test/" + filePath;
                     File file = new File(filePath);
-                    Scanner fReader = new Scanner(file);
-                    validFilePath = true;
-                } catch (FileNotFoundException e) {
-                    System.out.println("File tidak ditemukan. Silahkan masukkan path yang valid.");
+    
+                    if (!file.exists() || !file.isFile()) {
+                        System.out.println("Input file tidak ada, silahkan masukkan path yang benar!");
+                    } else {
+                        // Check if the file represents a square matrix
+                        if (!(Utils.getRowFile(filePath) == Utils.getColFile(filePath, Utils.getRowFile(filePath)))) {
+                            System.out.println("Matriks bukan matriks persegi, silahkan pilih file lain!");
+                        } else {
+                            validFilePath = true;
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println("Terjadi kesalahan ketika mengolah file");
                 }
-            }
-            while (!(Utils.getRowFile(filePath) == Utils.getColFile(filePath, Utils.getRowFile(filePath)))) {
-                System.out.println("Matriks yang ada bukan matriks segiempat, silahkan ganti file anda!");
-                System.out.print("Masukkan path file (relatif terhadap folder test): ");
-                filePath = input.nextLine();
-                filePath = "../test/" + filePath;
             }
 
             retmat.row = Utils.getRowFile(filePath);
@@ -84,6 +87,11 @@ public class DeterminanApp {
             retmat.readMatrixFile(filePath);
         }
 
+        System.out.println("");
+        System.out.println("Matriks pilihan : ");
+        System.out.println("");
+        retmat.printMatrix();
+        System.out.println("");
         System.out.println("Silahkan pilih metode yang ingin digunakan !");
         System.out.println("1. Metode kofaktor");
         System.out.println("2. Metode reduksi baris");

@@ -53,7 +53,6 @@ public class SPLApp {
         }
         else if (SPLchoicenum == 3) {
             SPL.inverseSPL(matriks.matrix, new double[12]);
-
         }
         else {
             String[] s = new String[matriks.row + 1];

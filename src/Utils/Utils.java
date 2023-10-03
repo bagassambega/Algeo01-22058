@@ -13,6 +13,32 @@ import matrix.Matrix;
 public class Utils {
     private static Scanner input = new Scanner(System.in);
 
+    public static double toDouble(String str) {
+        double ret = 0;
+        String[] temp = str.split("/");
+        // Handle input berupa pecahan
+        if (temp.length == 1) {
+            try {
+                ret = Double.parseDouble(str);
+            } catch (Exception e) {
+                
+                System.out.print(
+                "Terdapat kesalahan input pada file txt, silahkan ubah file yang ada dan ulangi kembali program!");
+                System.exit(0);
+            }
+        } else {
+            try {
+                ret = Double.parseDouble(temp[0]) / Double.parseDouble(temp[1]);
+            } catch (Exception e) {
+                
+                System.out.print(
+                        "Terdapat kesalahan input pada file txt, silahkan ubah file yang ada dan ulangi kembali program!");
+                System.exit(0);
+            }
+        }
+        return ret;
+    }
+
     public static int getRowFile(String filename) {
         int row = 0;
         try (FileReader fileInput = new FileReader(filename)) {
@@ -26,6 +52,17 @@ public class Utils {
             System.err.println(e);
         }
         return row;
+    }
+
+    public static Matrix copyMatrix(Matrix m) {
+        Matrix m1 = new Matrix(m.row, m.col);
+        for (int i = 0; i <= m.row - 1; i++) {
+            for (int j = 0; j <= m.col - 1; j++) {
+                m1.matrix[i][j] = m.matrix[i][j];
+            }
+        }
+        return m1;
+
     }
 
     public static int getColFile(String filename, int row) {
@@ -57,6 +94,26 @@ public class Utils {
             }
         }
 
+    }
+
+    public static Matrix matrixHilbert(int n) {
+        int ordo = n;
+        Matrix hilbert = new Matrix(ordo, ordo + 1);
+        int i, j;
+        for (i = 0; i < ordo; i++) {
+            for (j = 0; j < ordo; j++) {
+                hilbert.matrix[i][j] = 1.0 / (i + j + 1);
+            }
+        }
+        for (i = 0; i < ordo; i++) {
+            if (i == 0) {
+                hilbert.matrix[i][ordo] = 1;
+            } else {
+                hilbert.matrix[i][ordo] = 0;
+            }
+        }
+
+        return hilbert;
     }
 
     public static void solutionToFile(String[] s) {

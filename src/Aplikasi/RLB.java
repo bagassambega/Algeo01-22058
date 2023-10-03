@@ -50,7 +50,7 @@ public class RLB {
                     String s = fReader.nextLine();
                     String[] temp = s.split(" ", 0);
                     for (int j = 0; j <= col - 1; j++) {
-                        titik.matrix[i][j] = Double.parseDouble(temp[j]);
+                        titik.matrix[i][j] = Utils.toDouble(temp[j]);
                     }
                 }
                 i++;
@@ -62,7 +62,7 @@ public class RLB {
             String s = fReader.nextLine();
             String[] temp = s.split(" ", 0);
             for (int j = 0; j <= col - 2; j++) {
-                ans.matrix[0][j] = Double.parseDouble(temp[j]);
+                ans.matrix[0][j] = Utils.toDouble(temp[j]);
             }
             fReader.close();
         } catch (FileNotFoundException e) {
@@ -230,6 +230,7 @@ public class RLB {
         for (int i = 0; i <= 3; i++) {
             System.out.printf("%s", s[i]);
             System.out.println();
+            System.out.println();
         }
     }
 
@@ -269,6 +270,7 @@ public class RLB {
         if (normaleq(titik) == null) {
             System.out.print("Tidak dapat ditemukan nilai koefisien dari titik-titik yang diberikan.");
         } else {
+            System.out.print("\n");
             output(normaleq(titik), ans, s);
             
             Utils.solutionToFile(s);
