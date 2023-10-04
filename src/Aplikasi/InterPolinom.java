@@ -73,7 +73,7 @@ public class InterPolinom {
     }
     public static void Menu() {
         System.out.println("\n==========INTERPOLASI LINEAR============");
-        Matrix interpol = Utils.InputMatrix(4); // 4 adalah untuk interpolasi linear
+        Matrix interpol = Utils.InputMatrix("4"); // 4 adalah untuk interpolasi linear
         InterPolinom.makeEq(interpol);
         InterPolinom.solveEq(interpol);
         Scanner n = new Scanner(System.in);

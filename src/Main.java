@@ -17,19 +17,28 @@ public class Main {
             System.out.println("6. Interpolasi Bicubic Spline");
             System.out.println("7. Keluar");
             System.out.print("Pilih operasi yang ingin dilakukan: ");
-            int choice = input.nextInt();
+
+            String choice;
+            while (true) {
+                try {
+                    choice = input.next();
+                    break;
+                } catch (Exception e) {
+                    System.out.println("Input harus berupa angka (1-7)");
+                }
+            }
             input.nextLine();
-            if (choice == 1) {
+            if (Objects.equals(choice, "1")) {
                 SPLApp.Menu();
-            } else if (choice == 2) {
+            } else if (Objects.equals(choice, "2")) {
                 DeterminanApp.menu();
-            } else if (choice == 3) {
+            } else if (Objects.equals(choice, "3")) {
                 InverseApp.menu();
-            } else if (choice == 4) {
+            } else if (Objects.equals(choice, "4")) {
                 InterPolinom.Menu();
-            } else if (choice == 5) {
+            } else if (Objects.equals(choice, "5")) {
                 RLB.menu();
-            } else if (choice == 7) {
+            } else if (Objects.equals(choice, "7")) {
                 System.out.println("Terima kasih telah menggunakan program ini!");
                 mainLoop = false;
             } else {

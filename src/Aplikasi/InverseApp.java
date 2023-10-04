@@ -2,6 +2,7 @@ package Aplikasi;
 
 import Utils.Utils;
 
+import java.util.Objects;
 import java.util.Scanner;
 import matrix.*;
 
@@ -23,12 +24,12 @@ public class InverseApp {
 
         }
         else {
-            Matrix temp = Utils.InputMatrix(3);
+            Matrix temp = Utils.InputMatrix("3");
             if (Determinan.detKof(temp) == 0) {
                 System.out.println("Matriks tidak memiliki invers.");
                 return;
             }
-            Matrix inv = new Matrix(temp.row, temp.col * 2);
+            Matrix inv = new Matrix(temp.row, temp.col * 2); // Matrix augmented
             for (int i = 0; i < temp.row; i++) {
                 // Copy matrix input
                 for (int j = 0; j < temp.col; j++) {
@@ -46,8 +47,23 @@ public class InverseApp {
             }
             SPL.CreateMatrixEselon(inv, 3);
             SPL.CreateMatrixEselonReduced(inv, 3);
-            System.out.println("==============");
-            inv.printMatrix();
+            System.out.println("Invers matriks: ");
+            Matrix res = new Matrix(temp.row, temp.col);
+            for (int i = 0; i < temp.row; i++) {
+                for (int j = 0; j < temp.col; j++) {
+                    res.matrix[i][j] = inv.matrix[i][j + temp.col];
+                }
+            }
+            res.printMatrix();
+            System.out.print("Apakah anda ingin menyimpan file? (Y/N) ");
+            String confirm = input.next();
+            if (Objects.equals(confirm, "Y") || Objects.equals(confirm, "y")) {
+                Utils.matrixToFile(res);
+            }
+            else {
+                System.out.println("Proses menyimpan file dibatalkan.");
+            }
         }
+
     }
 }

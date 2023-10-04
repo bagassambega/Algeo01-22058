@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 import java.util.Scanner;
 
 import matrix.Matrix;
@@ -186,47 +187,38 @@ public class Utils {
         }
     }
 
-    public static Matrix InputMatrix(int choice) {
+    public static Matrix InputMatrix(String choice) {
         // choice untuk menentukan apakah matriks yang diimasukkan harus matriks persegi
         // atau bukan
 
         System.out.print("Masukkan matrix melalui terminal (1) atau file (2)?: ");
-        int InputMatrixChoice = input.nextInt();
+        String InputMatrixChoice = input.next();
         input.nextLine();
         while (true) {
-            if (InputMatrixChoice == 1 || InputMatrixChoice == 2) {
+            if (Objects.equals(InputMatrixChoice, "1") || Objects.equals(InputMatrixChoice, "2")) {
                 break;
             } else {
                 System.out.println("Input tidak valid!");
                 System.out.print("Masukkan matrix melalui terminal (1) atau file (2)?: ");
-                InputMatrixChoice = input.nextInt();
+                InputMatrixChoice = input.next();
                 input.nextLine();
             }
         }
         switch (InputMatrixChoice) { // Menentukan bentuk matriks yang dimasukkan
-            case 1:
+            case "1":
                 // Masukan dari terminal
 
                 int row = 0, col = 0;
-                if (choice == 1) { // SPL
+                if (Objects.equals(choice, "1")) { // SPL
                     System.out.print("Masukkan jumlah variabel dalam persamaan: ");
                     col = input.nextInt();
                     input.nextLine();
                     System.out.print("Masukkan jumlah persamaan: ");
                     row = input.nextInt();
                     input.nextLine();
-                    while (row < col) { // Minimal jika ada n variabel, harus ada n persamaan
-                        System.out.println("Jumlah persamaan minimal sama dengan jumlah variabel.");
-                        System.out.print("Masukkan jumlah variabel dalam persamaan: ");
-                        col = input.nextInt();
-                        input.nextLine();
-                        System.out.print("Masukkan jumlah persamaan: ");
-                        row = input.nextInt();
-                        input.nextLine();
-                    }
                     col += 1; // Agar bisa memasukkan hasil persamaan ke kolom paling akhir
                     System.out.println("Masukkan persamaan (Baca README untuk penulisan): ");
-                } else if ((choice == 2) || (choice == 3)) { // Determinan/Invers, matriks persegi
+                } else if (Objects.equals(choice, "2") || Objects.equals(choice, "3")) { // Determinan/Invers, matriks persegi
                     System.out.print("Masukkan banyak kolom matriks: ");
                     col = input.nextInt();
                     input.nextLine();
@@ -234,7 +226,7 @@ public class Utils {
                     row = input.nextInt();
                     input.nextLine();
                     while (row != col) { // Harus bentuknya matriks persegi
-                        System.out.println("Matriks persegi harus memiliki jumlah kolom dan baris yang sama.");
+                        System.out.println("Matriks persegi harus memiliki jumlah kolom dan baris yang sama. (Baca README)");
                         System.out.print("Masukkan banyak kolom matriks: ");
                         col = input.nextInt();
                         input.nextLine();
@@ -243,7 +235,7 @@ public class Utils {
                         input.nextLine();
                     }
                     System.out.println("Masukkan matrix (Baca README untuk penulisan): ");
-                } else if (choice == 4) { // Interpolasi linear
+                } else if (Objects.equals(choice, "4")) { // Interpolasi linear
                     System.out.print("Berapa derajat polinom yang dicari? ");
                     row = input.nextInt();
                     input.nextLine();
@@ -262,7 +254,7 @@ public class Utils {
                 matCLI.readMatrixCLI(matCLI.row, matCLI.col);
                 return matCLI;
 
-            case 2:
+            case "2":
                 // Masukan dari file
                 Scanner inputFilename = new Scanner(System.in);
                 System.out.print("Masukkan path file (relatif terhadap folder test): ");

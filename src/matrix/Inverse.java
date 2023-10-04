@@ -1,6 +1,4 @@
 package matrix;
-import java.util.Scanner;
-import Aplikasi.*;
 import Utils.*;
  
 public class Inverse 

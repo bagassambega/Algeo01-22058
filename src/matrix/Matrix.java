@@ -25,7 +25,14 @@ public class Matrix {
     public void readMatrixCLI(int row, int col) {
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
-                this.matrix[i][j] = scanElmt.nextDouble();
+                while (true) {
+                    try {
+                        this.matrix[i][j] = scanElmt.nextDouble();
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Input harus berupa angka integer/real!");
+                    }
+                }
             }
         }
     }
@@ -36,14 +43,15 @@ public class Matrix {
             int row = 0;
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-
                 String[] lineArray = line.split(" ");
                 for (int i = 0; i < lineArray.length; i++) {
-                    try 
-                    {this.matrix[row][i] = Utils.toDouble(lineArray[i]);}
-                    catch (Exception e){
-                        System.out.print("Terdapat kesalahan input pada file txt, silahkan ulangi kembali program dan ubah file yang ada!");
-                        System.exit(0);
+                    while (true) {
+                        try {
+                            this.matrix[row][i] = Double.parseDouble(lineArray[i]);
+                            break;
+                        } catch (Exception e) {
+                            System.out.println("Input harus berupa angka bulat/real!");
+                        }
                     }
                 }
                 row++;
