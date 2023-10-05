@@ -441,7 +441,6 @@ public class SPL {
                 }
                 s[i + 1] = String.format("x%d = %.4f", i + 1, solusi);
                 res[0] = String.format("x%d = %.4f\n", i + 1, solusi);
-                savetofile(awal, res);
             }
 
         }
