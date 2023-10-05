@@ -6,12 +6,37 @@ import java.util.Scanner;
 
 public class BicubicSpline{
     public static void menu() {
+        Scanner input = new Scanner(System.in);
+        Matrix matrix = new Matrix(16, 32);
+        Matrix inversed = new Matrix(16, 32);
+        Matrix constant_matrix = new Matrix(4, 4);
+        double[] constant_array = new double[16];
+        Matrix variable_array = new Matrix (14, 14);
+        inversed.matrix = InverseOfMatrix(matrixX(matrix.matrix), 16);
 
+        System.out.println("Masukkan matriks berisi konstanta (4x4): ");
+        int idx = 0;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                constant_matrix.matrix[i][j] = input.nextDouble();
+                constant_array[idx] = constant_matrix.matrix[i][j];
+                idx++;
+            }
+        }
+
+        double hasil;
+        variable_array.matrix = inverseSPLBicubicSpline(inversed.matrix, constant_array);
+        double a, b;
+        System.out.print("Masukkan nilai A: ");
+        a = Utils.inputDouble();
+        System.out.print("Masukkan nilai B: ");
+        b = Utils.inputDouble();
+        hasil = BicubicSplineEquation(matrixX(matrix.matrix), variable_array.matrix, a, b);
+        System.out.printf("Hasil f(%f, %f) = %.6f", a, b, hasil);
     }
     
     public static double BicubicSplineEquation(double[][] mtrx, double[][] variables, double a, double b){
         double value = 0;
-
         for(int j = 0; j <= 3; j++){
             for(int i = 0; i <= 3; i++){
                 value += variables[i][j] * Math.pow(a, i) * Math.pow(b, j);

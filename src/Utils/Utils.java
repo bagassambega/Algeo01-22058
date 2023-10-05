@@ -269,16 +269,14 @@ public class Utils {
                     }
                     System.out.println("Masukkan matrix (Baca README untuk penulisan): ");
                 } else if (Objects.equals(choice, "4")) { // Interpolasi linear
-                    System.out.print("Berapa derajat polinom yang dicari? ");
+                    System.out.print("Masukkan banyak data yang diketahui: ");
                     row = Utils.inputInt();
-                    input.nextLine();
                     while (row <= 0) {
                         System.out.println("Derajat polinom tidak bisa 0 atau negatif!");
                         System.out.print("Masukkan derajat polinom yang dicari: ");
                         row = Utils.inputInt();
                         input.nextLine();
                     }
-                    row += 1;
                     col = row + 1; // Karena berbentuk persamaan, maka diperlukan kolom baru untuk menulis hasil
                                    // f(x)
                     return new Matrix(row, col);
@@ -303,20 +301,38 @@ public class Utils {
                 return matCLI;
 
             case "2":
-                // Masukan dari file
-                Scanner inputFilename = new Scanner(System.in);
-                System.out.print("Masukkan path file (relatif terhadap folder test): ");
-                String filePath = inputFilename.nextLine();
-                filePath = "../test/" + filePath;
-                Matrix matFile = new Matrix(Utils.getRowFile(filePath),
-                Utils.getColFile(filePath, Utils.getRowFile(filePath)));
-                matFile.readMatrixFile(filePath);
-                return matFile;
+                if (Objects.equals(choice, "4") || Objects.equals(choice, "6")) {
+                    inputMatrixFile(choice);
+                }
+                else {
+                    // Masukan dari file
+                    Scanner inputFilename = new Scanner(System.in);
+                    System.out.print("Masukkan path file (relatif terhadap folder test): ");
+                    String filePath = inputFilename.nextLine();
+                    filePath = "../test/" + filePath;
+                    Matrix matFile = new Matrix(Utils.getRowFile(filePath),
+                            Utils.getColFile(filePath, Utils.getRowFile(filePath)));
+                    matFile.readMatrixFile(filePath);
+                    return matFile;
+                }
             default:
                 System.out.println("Input tidak valid!");
                 return new Matrix(0, 0);
         }
 
+    }
+
+    public static Matrix inputMatrixFile(String choice) { // Khusus buat aplikasi
+        Scanner inputFilename = new Scanner(System.in);
+        System.out.print("Masukkan path file (relatif terhadap folder test): ");
+        String filePath = inputFilename.nextLine();
+        filePath = "../test/" + filePath;
+        int row, col;
+
+        Matrix matFile = new Matrix(Utils.getRowFile(filePath),
+                Utils.getColFile(filePath, Utils.getRowFile(filePath)));
+        matFile.readMatrixFile(filePath);
+        return matFile;
     }
 
 }
