@@ -193,45 +193,29 @@ public class SPL {
 
     public static void CreateReducedParametric(Matrix matrix) {
         // Prekondisi: matriks sudah dibuat menjadi matriks eselon biasa
-        int numRows = matrix.row;
-        int numCols = matrix.col;
+        int check = 0;
+        for (int i = 0; i < matrix.row; i++) {
 
-        int lead = 0; // The leading entry in each row
-
-        for (int i = 0; i < numRows; i++) {
-            if (lead >= numCols) {
-                break;
+            int j = 0;
+            while (j < matrix.col && matrix.matrix[i][j] == 0) {
+                j++;
             }
 
-            int pivotRow = i;
-            while (pivotRow < numRows && matrix.matrix[pivotRow][lead] == 0) {
-                pivotRow++;
-            }
-
-            if (pivotRow < numRows) {
-                // Swap the pivot row with the current row
-                double[] temp = matrix.matrix[i];
-                matrix.matrix[i] = matrix.matrix[pivotRow];
-                matrix.matrix[pivotRow] = temp;
-
-                double pivot = matrix.matrix[i][lead];
-                if (pivot != 0) {
-                    for (int j = 0; j < numCols; j++) {
-                        matrix.matrix[i][j] /= pivot;
-                    }
+            if (j < matrix.col) {
+                double pivot = matrix.matrix[i][j];
+                for (int k = j; k < matrix.col; k++) {
+                    matrix.matrix[i][k] /= pivot;
                 }
 
-                for (int k = 0; k < numRows; k++) {
-                    if (k != i) {
-                        double factor = matrix.matrix[k][lead];
-                        for (int j = 0; j < numCols; j++) {
-                            matrix.matrix[k][j] -= factor * matrix.matrix[i][j];
+                for (int l = 0; l < matrix.row; l++) {
+                    if (l != i && matrix.matrix[l][j] != 0) {
+                        double factor = matrix.matrix[l][j];
+                        for (int k = j; k < matrix.col; k++) {
+                            matrix.matrix[l][k] -= factor * matrix.matrix[i][k];
                         }
                     }
                 }
             }
-
-            lead++;
         }
     }
 
@@ -270,6 +254,7 @@ public class SPL {
                         / without0.matrix[i][findIndexColFirstNonZero(without0, i)];
             }
         }
+
 
         // Proses copy nilai unik yang sudah ada ke stringhasil
         for (int i = 0; i < stringHasil.length; i++) {

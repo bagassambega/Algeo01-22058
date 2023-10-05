@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
 
 public class BonusSplineImage{
     //Process Image
-    public static int[][] add_border(int A[][]){
+    public static int[][] add_border(int[][] A){
         int[][]temp = new int[A.length + 4][A[0].length + 4];
         for(int i = 0; i < 2; i++){
             for(int j = 0; j < A[0].length + 4; j++){
@@ -50,7 +50,7 @@ public class BonusSplineImage{
     }
 
     //A udh di-add border
-    public static byte[] iterate_image(int A[][], int scale){
+    public static byte[] iterate_image(int[][] A, int scale){
         byte []finalarray = new byte[A.length * 4 * A[0].length];
         int idx_final = 0;
         double [][]dMatrix = new double[16][16];

@@ -24,24 +24,13 @@ public class Matrix {
         Scanner inp = new Scanner(System.in);
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
-                boolean val = false;
                 this.matrix[i][j] = inp.nextDouble();
-//                while (!val) {
-//                    try {
-//                        val = true;
-//                    } catch (Exception e) {
-//                        System.out.println("Input harus berupa angka integer/real!");
-//                        System.out.print("Masukkan elemen kembali: ");
-//                        inp.nextLine();
-//                        this.matrix[i][j] = inp.nextDouble();
-//                        System.out.printf("Lanjutkan input elemen! (%d, %d)", i, j);
-//                        break;
-//                    }
-                }
-
-
+            }
         }
     }
+
+
+
 
     public void readMatrixFile(String filename) {
         try (FileReader fileInput = new FileReader(filename)) {

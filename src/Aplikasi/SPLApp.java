@@ -32,13 +32,28 @@ public class SPLApp {
                 input.nextLine();
             }
         }
-        Matrix matriks = Utils.InputMatrix("1");
-        Matrix forFile = new Matrix(matriks.row, matriks.col);
-        for (int i = 0; i < matriks.row; i++) {
-            for (int j = 0; j < matriks.col; j++) {
-                forFile.matrix[i][j] = matriks.matrix[i][j];
+        Matrix temp = Utils.InputMatrix("1");
+        Matrix forFile = new Matrix(temp.row, temp.col);
+        for (int i = 0; i < temp.row; i++) {
+            for (int j = 0; j < temp.col; j++) {
+                forFile.matrix[i][j] = temp.matrix[i][j];
             }
         }
+        
+        Matrix matriks = new Matrix(temp.col - 1, temp.col);
+        for (int i = 0; i < temp.row; i++) {
+            if (temp.col >= 0)
+                System.arraycopy(temp.matrix[i], 0, matriks.matrix[i], 0, temp.col);
+        }
+        if (temp.row < temp.col - 1) { // Cek apakah jumlah persamaan < jumlah variabel
+            for (int i = temp.row; i < matriks.row; i++) {
+                for (int j = 0; j < temp.col; j++) {
+                    matriks.matrix[i][j] = 0;
+                }
+            }
+        }
+
+        
         switch (SPLchoicenum) {
             case "1" :
                 SPL.CreateMatrixEselon(matriks, 1);
@@ -47,6 +62,11 @@ public class SPLApp {
                 break;
 
             case "2" :
+
+                if (matriks.row < matriks.col - 1) {
+                    SPL.parametricSol(matriks, forFile);
+                    return;
+                }
                 SPL.CreateMatrixEselon(matriks, 1);
                 Utils.rounding(matriks);
                 if (SPL.checkSolveType(matriks, 1) == -1) {

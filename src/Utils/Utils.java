@@ -283,21 +283,6 @@ public class Utils {
                 }
                 Matrix matCLI = new Matrix(row, col);
                 matCLI.readMatrixCLI(matCLI.row, matCLI.col);
-                if (Objects.equals(choice, "1")) {
-                    if (matCLI.row < matCLI.col - 1) { // Cek apakah jumlah persamaan < jumlah variabel
-                        Matrix revisedMat = new Matrix(matCLI.col - 1, matCLI.col);
-                        for (int i = 0; i < matCLI.row; i++) {
-                            if (matCLI.col >= 0)
-                                System.arraycopy(matCLI.matrix[i], 0, revisedMat.matrix[i], 0, matCLI.col);
-                        }
-                        for (int i = matCLI.row; i < revisedMat.row; i++) {
-                            for (int j = 0; j < matCLI.col; j++) {
-                                revisedMat.matrix[i][j] = 0;
-                            }
-                        }
-                        return revisedMat;
-                    }
-                }
                 return matCLI;
 
             case "2":

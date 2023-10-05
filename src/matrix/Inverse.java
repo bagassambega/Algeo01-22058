@@ -1,6 +1,7 @@
 package matrix;
 import Utils.*;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -19,14 +20,22 @@ public class Inverse
             System.out.print("Masukkan pilihan: ");
             choice = Utils.inputInt();
         }
+        String[] s = new String[1];
         if (choice == 1) {
             Matrix temp = Utils.InputMatrix("3");
+            s[0] += "Matriks masukan: \n";
+            for (int i = 0; i < temp.row; i++) {
+                s[0] += Arrays.toString(temp.matrix[i]) + "\n";
+            }
             Matrix adj = new Matrix(temp.row, temp.col);
             Matrix inv = new Matrix(temp.row, temp.col);
             adjoint(temp.matrix, adj.matrix);
             if (inverse(temp.matrix, adj.matrix)) {
+                s[0] += "Matriks invers: \n";
                 display(adj.matrix);
-                adj.printMatrix();
+                for (int i = 0; i < adj.row; i++) {
+                    s[0] += Arrays.toString(adj.matrix[i]) + "\n";
+                }
             }
             else {
                 System.out.println("Matriks tidak memiliki invers!");
@@ -34,6 +43,10 @@ public class Inverse
         }
         else {
             Matrix temp = Utils.InputMatrix("3");
+            s[0] += "Matriks masukan: \n";
+            for (int i = 0; i < temp.row; i++) {
+                s[0] += Arrays.toString(temp.matrix[i]) + "\n";
+            }
             if (Determinan.detKof(temp) == 0) {
                 System.out.println("Matriks tidak memiliki invers.");
                 return;
@@ -63,14 +76,11 @@ public class Inverse
                     res.matrix[i][j] = inv.matrix[i][j + temp.col];
                 }
             }
+            System.out.println("Invers: ");
             res.printMatrix();
-            System.out.print("Apakah anda ingin menyimpan file? (Y/N) ");
-            String confirm = input.next();
-            if (Objects.equals(confirm, "Y") || Objects.equals(confirm, "y")) {
-                Utils.matrixToFile(res);
-            }
-            else {
-                System.out.println("Proses menyimpan file dibatalkan.");
+            s[0] += "Matriks invers: \n";
+            for (int i = 0; i < res.row; i++) {
+                s[0] += Arrays.toString(res.matrix[i]) + "\n";
             }
         }
 
@@ -152,7 +162,6 @@ public class Inverse
         double det = determinant(A);
         if (det == 0)
         {
-            System.out.println("Matrix tidak memiliki inverse/balikan");
             return false;
         }
 
