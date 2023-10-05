@@ -34,41 +34,25 @@ public class InterPolinom {
     }
 
     public static void solveEq(Matrix matrix, String[] res) {
-        String[] s = new String[matrix.row + 1];
-        Matrix m1 = SPL.getAnsOnly(matrix);
-        if (Determinan.detReduksi(matrix) != 0) {
-            double detawal = Determinan.detReduksi(matrix);// sebagai pembagi
-            detawal = Determinan.detReduksi(SPL.getEquationOnly(matrix));// sebagai pembagi
-            for (int i = 0; i <= matrix.col - 2; i++) {// loop untuk interate ganti kolom ke i dengan ANS
-                Matrix m2 = SPL.getEquationOnly(matrix);
-                for (int j = 0; j <= matrix.row - 1; j++) {// algoritma ganti baris
-                    m2.matrix[j][i] = m1.matrix[j][0];
-                }
-                double det = Determinan.detReduksi(m2);// cari determinan setelah diganti
-                double solusi = det / detawal; // rumus kramer
-                if (i == 0) {
-                    System.out.println("Persamaan: ");
-                    res[0] += "Persamaan: \n";
-                    s[0] = "f(x) = ";
-                    res[0] = "f(x) = ";
-                    System.out.print("f(x) = ");
-                    res[0] += ("f(x) = ");
-                } else if (i == matrix.col - 2) {
-                    System.out.printf("%f\n", solusi);
-                    res[0] += String.format("%f\n", solusi);
-                } else {
-                    System.out.printf("(%f)x^%d + ", solusi, matrix.col - i - 2);
-                    res[0] += String.format("(%f)x^%d + ", solusi, matrix.col - i - 2);
-                }
-                s[i + 1] = String.format("(%f)x^%d + ", solusi, matrix.col - i - 1);
-            }
-
+        SPL.CreateMatrixEselon(matrix, 1);
+        if (SPL.checkSolveType(matrix, 1) == -1 || SPL.checkSolveType(matrix, 1) == 1) {
+            System.out.println("Tidak ada persamaan yang memenuhi.");
         }
-
-        else
-
-        {
-            System.out.println("Determinan == 0, maka solusi dari SPL di atas tidak unik, gunakan metode lain.");
+        else {
+            SPL.CreateMatrixEselonReduced(matrix, 1);
+            if (SPL.checkSolveType(matrix, 1) == -1 || SPL.checkSolveType(matrix, 1) == 1) {
+                System.out.println("Tidak ada persamaan yang memenuhi.");
+            }
+            else {
+                System.out.print("f(x) = ");
+                for (int i = 0; i < matrix.row; i++) {
+                    if (i == matrix.row - 1) {
+                        System.out.printf("(%.6f)\n", matrix.matrix[i][matrix.col - 1]);
+                    } else {
+                        System.out.printf("(%f)x^%d + ", matrix.matrix[i][matrix.col - 1], matrix.col - i - 2);
+                    }
+                }
+            }
         }
     }
 
