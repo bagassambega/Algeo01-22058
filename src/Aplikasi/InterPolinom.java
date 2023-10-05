@@ -120,7 +120,7 @@ public class InterPolinom {
         }
         else {
             Matrix data = new Matrix(0, 0);
-            s[0] += "Data yang dimasukkan: \n";
+            s[0] = "Data yang dimasukkan: \n";
             Matrix fx = new Matrix(0, 0);
             RLB.inputRLBFile(data, fx);
             Matrix interpol = new Matrix(data.row, data.row + 1);
