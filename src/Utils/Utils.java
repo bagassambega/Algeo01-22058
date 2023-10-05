@@ -14,6 +14,45 @@ import matrix.Matrix;
 public class Utils {
     private static Scanner input = new Scanner(System.in);
 
+    public static double inputDouble() {
+        Scanner input = new Scanner(System.in);
+        boolean isValid = false;
+        double userInput = 0;
+        while (!isValid) {
+            try {
+                userInput = input.nextDouble();
+                isValid = true;
+            }
+            catch (Exception e) {
+                System.out.println("Input harus berupa bilangan real.");
+                System.out.print("Masukkan ulang: ");
+                input.nextLine();
+                userInput = input.nextDouble();
+                break;
+            }
+        }
+        return userInput;
+    }
+
+
+    public static int inputInt() { // Validasi input harus integer
+        Scanner input = new Scanner(System.in);
+        boolean isValid = false;
+        int userInput = 0;
+        while (!isValid) {
+            if (input.hasNextInt()) {
+                userInput = input.nextInt();
+                isValid = true;
+            }
+            else {
+                System.out.println("Input harus berupa integer.");
+                System.out.print("Masukkan ulang: ");
+                input.nextLine();
+            }
+        }
+        return userInput;
+    }
+
     public static double toDouble(String str) {
         double ret = 0;
         String[] temp = str.split("/");
@@ -211,38 +250,32 @@ public class Utils {
                 int row = 0, col = 0;
                 if (Objects.equals(choice, "1")) { // SPL
                     System.out.print("Masukkan jumlah variabel dalam persamaan: ");
-                    col = input.nextInt();
-                    input.nextLine();
+                    col = Utils.inputInt();
                     System.out.print("Masukkan jumlah persamaan: ");
-                    row = input.nextInt();
-                    input.nextLine();
+                    row = Utils.inputInt();
                     col += 1; // Agar bisa memasukkan hasil persamaan ke kolom paling akhir
                     System.out.println("Masukkan persamaan (Baca README untuk penulisan): ");
                 } else if (Objects.equals(choice, "2") || Objects.equals(choice, "3")) { // Determinan/Invers, matriks persegi
                     System.out.print("Masukkan banyak kolom matriks: ");
-                    col = input.nextInt();
-                    input.nextLine();
+                    col = Utils.inputInt();
                     System.out.print("Masukkan banyak baris matriks: ");
-                    row = input.nextInt();
-                    input.nextLine();
+                    row = Utils.inputInt();
                     while (row != col) { // Harus bentuknya matriks persegi
                         System.out.println("Matriks persegi harus memiliki jumlah kolom dan baris yang sama. (Baca README)");
                         System.out.print("Masukkan banyak kolom matriks: ");
-                        col = input.nextInt();
-                        input.nextLine();
+                        col = Utils.inputInt();
                         System.out.print("Masukkan banyak baris matriks: ");
-                        row = input.nextInt();
-                        input.nextLine();
+                        row = Utils.inputInt();
                     }
                     System.out.println("Masukkan matrix (Baca README untuk penulisan): ");
                 } else if (Objects.equals(choice, "4")) { // Interpolasi linear
                     System.out.print("Berapa derajat polinom yang dicari? ");
-                    row = input.nextInt();
+                    row = Utils.inputInt();
                     input.nextLine();
                     while (row <= 0) {
                         System.out.println("Derajat polinom tidak bisa 0 atau negatif!");
                         System.out.print("Masukkan derajat polinom yang dicari: ");
-                        row = input.nextInt();
+                        row = Utils.inputInt();
                         input.nextLine();
                     }
                     row += 1;
@@ -252,6 +285,21 @@ public class Utils {
                 }
                 Matrix matCLI = new Matrix(row, col);
                 matCLI.readMatrixCLI(matCLI.row, matCLI.col);
+                if (Objects.equals(choice, "1")) {
+                    if (matCLI.row < matCLI.col - 1) { // Cek apakah jumlah persamaan < jumlah variabel
+                        Matrix revisedMat = new Matrix(matCLI.col - 1, matCLI.col);
+                        for (int i = 0; i < matCLI.row; i++) {
+                            if (matCLI.col >= 0)
+                                System.arraycopy(matCLI.matrix[i], 0, revisedMat.matrix[i], 0, matCLI.col);
+                        }
+                        for (int i = matCLI.row; i < revisedMat.row; i++) {
+                            for (int j = 0; j < matCLI.col; j++) {
+                                revisedMat.matrix[i][j] = 0;
+                            }
+                        }
+                        return revisedMat;
+                    }
+                }
                 return matCLI;
 
             case "2":
@@ -261,7 +309,7 @@ public class Utils {
                 String filePath = inputFilename.nextLine();
                 filePath = "../test/" + filePath;
                 Matrix matFile = new Matrix(Utils.getRowFile(filePath),
-                        Utils.getColFile(filePath, Utils.getRowFile(filePath)));
+                Utils.getColFile(filePath, Utils.getRowFile(filePath)));
                 matFile.readMatrixFile(filePath);
                 return matFile;
             default:

@@ -1,16 +1,14 @@
 package matrix;
 
-import java.math.*;
 import java.util.*;
 import java.io.*;
 import Utils.*;
-import java.text.DecimalFormat;
+
 
 public class Matrix {
     public int row;
     public int col;
     public double[][] matrix;
-    Scanner scanElmt = new Scanner(System.in);
 
     public Matrix(int row, int col) {
         this.row = row;
@@ -23,17 +21,25 @@ public class Matrix {
     }
 
     public void readMatrixCLI(int row, int col) {
+        Scanner inp = new Scanner(System.in);
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
-                while (true) {
-                    try {
-                        this.matrix[i][j] = scanElmt.nextDouble();
-                        break;
-                    } catch (Exception e) {
-                        System.out.println("Input harus berupa angka integer/real!");
-                    }
+                boolean val = false;
+                this.matrix[i][j] = inp.nextDouble();
+//                while (!val) {
+//                    try {
+//                        val = true;
+//                    } catch (Exception e) {
+//                        System.out.println("Input harus berupa angka integer/real!");
+//                        System.out.print("Masukkan elemen kembali: ");
+//                        inp.nextLine();
+//                        this.matrix[i][j] = inp.nextDouble();
+//                        System.out.printf("Lanjutkan input elemen! (%d, %d)", i, j);
+//                        break;
+//                    }
                 }
-            }
+
+
         }
     }
 
@@ -45,14 +51,19 @@ public class Matrix {
             while ((line = bufferedReader.readLine()) != null) {
                 String[] lineArray = line.split(" ");
                 for (int i = 0; i < lineArray.length; i++) {
-                    while (true) {
+
                         try {
-                            this.matrix[row][i] = Double.parseDouble(lineArray[i]);
-                            break;
+                            this.matrix[row][i] = Utils.toDouble(lineArray[i]);
+
                         } catch (Exception e) {
                             System.out.println("Input harus berupa angka bulat/real!");
+                            System.out.println("Perbaiki terlebih dahulu file!");
+                            System.out.print("Masukkan path file (relatif ke folder test): ");
+                            Scanner path = new Scanner(System.in);
+                            String filepath = path.nextLine();
+                            readMatrixFile("../test/" + filepath);
                         }
-                    }
+
                 }
                 row++;
             }
@@ -60,26 +71,24 @@ public class Matrix {
             bufferedReader.close();
         } catch (IOException e) {
             System.out.println("File tidak ditemukan/error!");
-            System.err.println(e);
+            System.out.print("Masukkan path file (relatif ke folder test): ");
+            Scanner path = new Scanner(System.in);
+            String filepath = path.nextLine();
+            readMatrixFile("../test/" + filepath);
         }
     }
 
     public void printMatrix() {
-        System.out.print("[");
         for (int i = 0; i < this.row; i++) {
-            System.out.print("[");
             for (int j = 0; j < this.col; j++) {
                 System.out.print(this.matrix[i][j]);
                 if (j != this.col - 1) {
-                    System.out.print(", ");
+                    System.out.print(" ");
                 }
             }
-            System.out.print("]");
-            if (i != this.row - 1) {
-                System.out.print(",\n");
-            }
+            System.out.print("\n");
+
         }
-        System.out.println("]");
     }
 
     public void roundElmtMatrix(int n) {
@@ -91,19 +100,6 @@ public class Matrix {
         }
     }
 
-    public double round2(double value, int n) { // Last rounding
-        BigDecimal bd = new BigDecimal(value).setScale(n, RoundingMode.HALF_UP);
-        BigDecimal num = bd.round(new MathContext(n));
-        return num.doubleValue();
-    }
-
-    public void roundMatrix(int n) {
-        for (int i = 0; i < this.row; i++) {
-            for (int j = 0; j < this.col - 1; j++) {
-                this.matrix[i][j] = round2(this.matrix[i][j], n);
-            }
-        }
-    }
 
     public Matrix multiplyMatrix(Matrix m1, Matrix m2) {
         Matrix m3 = new Matrix(m1.row, m2.col);

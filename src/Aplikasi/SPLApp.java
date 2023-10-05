@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 import Utils.Utils;
+import matrix.Inverse;
 import matrix.Matrix;
 import matrix.SPL;
 
@@ -32,11 +33,13 @@ public class SPLApp {
             }
         }
         Matrix matriks = Utils.InputMatrix("1");
+        
         switch (SPLchoicenum) {
             case "1" :
                 SPL.CreateMatrixEselon(matriks, 1);
                 Utils.rounding(matriks);
                 SPL.solveSPLEchelon(matriks, 1);
+                break;
 
             case "2" :
                 SPL.CreateMatrixEselon(matriks, 1);
@@ -55,14 +58,39 @@ public class SPLApp {
                         SPL.solveSPLReduced(matriks);
                     }
                 }
+                break;
 
             case "3" :
-                SPL.inverseSPL(matriks.matrix, new double[12]);
+                Matrix inv = new Matrix(matriks.row, matriks.col - 1); // Dikurangin 1 untuk menghilangkan result
+                if (inv.col != inv.row) {
+                    System.out.println("Matriks tidak memiliki invers.");
+                    return;
+                }
+                for (int i = 0; i < matriks.row; i++) {
+                    if (matriks.col >= 0) System.arraycopy(matriks.matrix[i], 0, inv.matrix[i], 0, matriks.col - 1);
+                }
+                Matrix adj = new Matrix(matriks.row, matriks.col - 1);
+                Inverse.adjoint(inv.matrix, adj.matrix);
+                if (!Inverse.inverse(inv.matrix, adj.matrix)) {
+                    System.out.println("Matriks tidak memiliki invers!");
+                    return;
+                }
+                Matrix reseq = new Matrix(matriks.row, 1);
+                for (int i = 0; i < matriks.row; i++) {
+                    reseq.matrix[i][0] = matriks.matrix[i][matriks.col - 1];
+                }
+                Matrix res = new Matrix(matriks.row, 1);
+                res = res.multiplyMatrix(adj, reseq);
+                System.out.println("Solusi persamaan: ");
+                for (int i = 0; i < res.row; i++) {
+                    System.out.printf("X%d = %f\n", i+1, res.matrix[i][0]);
+                }
+                break;
             default :
                 String[] s = new String[matriks.row + 1];
                 SPL.CramerSolver(matriks, s);
                 Utils.solutionToFile(s);
-
+                break;
         }
     }
 

@@ -79,9 +79,9 @@ public class RLB {
         while (!validInput) {
             try {
                 System.out.print("Masukkan jumlah peubah (n): ");
-                n = input.nextInt();
+                n = Utils.inputInt();
                 System.out.print("Masukkan jumlah sampel (m): ");
-                m = input.nextInt();
+                m = Utils.inputInt();
                 validInput = true; // Input is valid, exit the loop
             } catch (InputMismatchException e) {
                 // Input is not an integer, clear the input buffer and prompt again
@@ -100,7 +100,7 @@ public class RLB {
                     i + 1);
             for (int j = 0; j <= n; j++) {
                 try {
-                    titik.matrix[i][j] = input.nextDouble();
+                    titik.matrix[i][j] = Utils.inputDouble();
                 } catch (InputMismatchException e) {
                     // Input is not a double, clear the input buffer and prompt again
                     System.out.println("Input harus berupa bilangan desimal.");
@@ -119,7 +119,7 @@ public class RLB {
         for (int j = 0; j < n; j++) {
             try {
                 System.out.printf("Masukkan x%d : ", j + 1);
-                ans.matrix[0][j] = input.nextDouble();
+                ans.matrix[0][j] = Utils.inputDouble();
             } catch (InputMismatchException e) {
                 // Input is not a double, clear the input buffer and prompt again
                 System.out.println("Input harus berupa bilangan desimal.");
@@ -249,7 +249,7 @@ public class RLB {
 
         while (!validInput) {
             try {
-                choice = input.nextInt();
+                choice = Utils.inputInt();
                 if (choice == 1 || choice == 2) {
                     validInput = true;
                     input.nextLine();

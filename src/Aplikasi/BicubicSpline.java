@@ -1,8 +1,15 @@
 package Aplikasi;
+import Utils.Utils;
+import matrix.Matrix;
+
 import java.util.Scanner;
 
 public class BicubicSpline{
-    static double BicubicSplineEquation(double[][] mtrx, double[][] variables, double a, double b){
+    public static void menu() {
+
+    }
+    
+    public static double BicubicSplineEquation(double[][] mtrx, double[][] variables, double a, double b){
         double value = 0;
 
         for(int j = 0; j <= 3; j++){
@@ -13,7 +20,7 @@ public class BicubicSpline{
         return value;
     }
 
-    static double[][] InverseOfMatrix(double[][] matrix, int order)
+    public static double[][] InverseOfMatrix(double[][] matrix, int order)
     {
         double temp;
 
@@ -85,7 +92,7 @@ public class BicubicSpline{
         return inverse_matrix;
     }
 
-    static double[][] matrixX (double[][] A){
+    public static double[][] matrixX (double[][] A){
         //baris 1-4
         //(0, 0) -> (1, 0) -> (0, 1) -> (1,1)
         int row = 0;
@@ -163,7 +170,7 @@ public class BicubicSpline{
         return A;
     }
 
-    static double[][] inverseSPLBicubicSpline(double[][] inversed, double[] constant){
+    public static double[][] inverseSPLBicubicSpline(double[][] inversed, double[] constant){
         double sum;
 
         double[][] variable = new double[4][4];

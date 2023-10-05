@@ -191,29 +191,51 @@ public class SPL {
 
     public static void CreateReducedParametric(Matrix matrix) {
         // Prekondisi: matriks sudah dibuat menjadi matriks eselon biasa
-        for (int i = matrix.row - 1; i >= 0; i--) {
-            for (int j = matrix.col - 1; j >= 0; j--) {
-                // Mencari angka 1 di setiap baris
-                if (matrix.matrix[i][j] == 1) {
-                    double pengali;
-                    while (i >= 1) {
-                        pengali = matrix.matrix[i - 1][j];
-                        double nilai;
-                        for (int k = 0; k < matrix.col; k++) {
-                            nilai = matrix.matrix[i][k] * pengali;
-                            matrix.matrix[i-1][k] -= nilai;
+        int numRows = matrix.row;
+        int numCols = matrix.col;
+
+        int lead = 0; // The leading entry in each row
+
+        for (int i = 0; i < numRows; i++) {
+            if (lead >= numCols) {
+                break;
+            }
+
+            int pivotRow = i;
+            while (pivotRow < numRows && matrix.matrix[pivotRow][lead] == 0) {
+                pivotRow++;
+            }
+
+            if (pivotRow < numRows) {
+                // Swap the pivot row with the current row
+                double[] temp = matrix.matrix[i];
+                matrix.matrix[i] = matrix.matrix[pivotRow];
+                matrix.matrix[pivotRow] = temp;
+
+                double pivot = matrix.matrix[i][lead];
+                if (pivot != 0) {
+                    for (int j = 0; j < numCols; j++) {
+                        matrix.matrix[i][j] /= pivot;
+                    }
+                }
+
+                for (int k = 0; k < numRows; k++) {
+                    if (k != i) {
+                        double factor = matrix.matrix[k][lead];
+                        for (int j = 0; j < numCols; j++) {
+                            matrix.matrix[k][j] -= factor * matrix.matrix[i][j];
                         }
-                        i--;
                     }
                 }
             }
+
+            lead++;
         }
     }
 
     public static void parametricSol(Matrix matrix) {
         Double[] arrayHasil = new Double[matrix.row];
         String[] stringHasil = new String[matrix.row];
-
         // Inisialisasi arrayHasil dengan NaN dan stringHasil dengan ""
         for (int i = 0; i < arrayHasil.length; i++) {
             arrayHasil[i] = Double.NaN;

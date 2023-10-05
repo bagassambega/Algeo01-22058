@@ -23,7 +23,7 @@ public class DeterminanApp {
 
         while (!validInput) {
             try {
-                choice = input.nextInt();
+                choice = Utils.inputInt();
                 if (choice == 1 || choice == 2) {
                     validInput = true;
                     input.nextLine();
@@ -40,15 +40,15 @@ public class DeterminanApp {
         Matrix retmat = new Matrix(0, 0);
         if (choice == 2) {
             System.out.print("Masukkan banyak kolom matriks: ");
-            col = input.nextInt();
+            col = Utils.inputInt();
             System.out.print("Masukkan banyak baris matriks: ");
-            row = input.nextInt();
+            row = Utils.inputInt();
             while (row != col) { // Harus bentuknya matriks persegi
                 System.out.println("Matriks persegi harus memiliki jumlah kolom dan baris yang sama.");
                 System.out.print("Masukkan banyak kolom matriks: ");
-                col = input.nextInt();
+                col = Utils.inputInt();
                 System.out.print("Masukkan banyak baris matriks: ");
-                row = input.nextInt();
+                row = Utils.inputInt();
             }
             System.out.println("Masukkan matrix (Baca README untuk penulisan): ");
             retmat.row = row;
@@ -96,11 +96,11 @@ public class DeterminanApp {
         System.out.println("1. Metode kofaktor");
         System.out.println("2. Metode reduksi baris");
         System.out.print("Masukkan pilihan: ");
-        int n = input.nextInt();
+        int n = Utils.inputInt();
         while (n < 1 || n > 3) {
             System.out.println("Masukkan input yang valid!");
             System.out.print("Masukkan pilihan: ");
-            n = input.nextInt();
+            n = Utils.inputInt();
         }
         String[] s = new String[1]; // Declare an array of strings with one element
         if (n == 1) {

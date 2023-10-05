@@ -1,5 +1,5 @@
 import java.util.*;
-
+import Utils.*;
 import matrix.*;
 
 public class TestInverse
@@ -8,7 +8,7 @@ public class TestInverse
     {
         Scanner input = new Scanner(System.in);
         System.out.println("Enter the dimension of square matrix: ");
-        int n = input.nextInt();
+        int n = Utils.inputInt();
         double a[][]= new double[n][n];
         System.out.println("Enter the elements of matrix: ");
         for(int i=0; i<n; i++)

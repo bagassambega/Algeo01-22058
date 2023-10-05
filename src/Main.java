@@ -1,6 +1,7 @@
 import java.util.*;
-
+import Utils.*;
 import Aplikasi.*;
+import matrix.*;
 
 public class Main {
     private static Scanner input= new Scanner (System.in);
@@ -18,27 +19,20 @@ public class Main {
             System.out.println("7. Keluar");
             System.out.print("Pilih operasi yang ingin dilakukan: ");
 
-            String choice;
-            while (true) {
-                try {
-                    choice = input.next();
-                    break;
-                } catch (Exception e) {
-                    System.out.println("Input harus berupa angka (1-7)");
-                }
-            }
-            input.nextLine();
-            if (Objects.equals(choice, "1")) {
+            int choice = Utils.inputInt();
+            if (choice == 1) {
                 SPLApp.Menu();
-            } else if (Objects.equals(choice, "2")) {
+            } else if (choice == 2) {
                 DeterminanApp.menu();
-            } else if (Objects.equals(choice, "3")) {
-                InverseApp.menu();
-            } else if (Objects.equals(choice, "4")) {
+            } else if (choice == 3) {
+                Inverse.menu();
+            } else if (choice == 4) {
                 InterPolinom.Menu();
-            } else if (Objects.equals(choice, "5")) {
+            } else if (choice == 5) {
                 RLB.menu();
-            } else if (Objects.equals(choice, "7")) {
+            } else if (choice == 6) {
+                BicubicSpline.menu();
+            } else if (choice == 7) {
                 System.out.println("Terima kasih telah menggunakan program ini!");
                 mainLoop = false;
             } else {

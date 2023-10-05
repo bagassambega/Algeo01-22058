@@ -1,9 +1,85 @@
 package matrix;
 import Utils.*;
- 
-public class Inverse 
+
+import java.util.Objects;
+import java.util.Scanner;
+
+public class Inverse
 {
-    static double[][] getCofactor(double[][] A, int given_row, int given_column)
+
+    public static void menu() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("\n============INVERSE===============");
+        System.out.println("1. Metode adjoin");
+        System.out.println("2. Metode OBE");
+        System.out.print("Masukkan pilihan: ");
+        int choice = Utils.inputInt();
+        while (choice > 2 || choice < 1) {
+            System.out.println("Tidak ada opsi yang memenuhi.");
+            System.out.print("Masukkan pilihan: ");
+            choice = Utils.inputInt();
+        }
+        if (choice == 1) {
+            Matrix temp = Utils.InputMatrix("3");
+            Matrix adj = new Matrix(temp.row, temp.col);
+            Matrix inv = new Matrix(temp.row, temp.col);
+            adjoint(temp.matrix, adj.matrix);
+            if (inverse(temp.matrix, adj.matrix)) {
+                display(adj.matrix);
+                adj.printMatrix();
+            }
+            else {
+                System.out.println("Matriks tidak memiliki invers!");
+            }
+        }
+        else {
+            Matrix temp = Utils.InputMatrix("3");
+            if (Determinan.detKof(temp) == 0) {
+                System.out.println("Matriks tidak memiliki invers.");
+                return;
+            }
+            Matrix inv = new Matrix(temp.row, temp.col * 2); // Matrix augmented
+            for (int i = 0; i < temp.row; i++) {
+                // Copy matrix input
+                for (int j = 0; j < temp.col; j++) {
+                    inv.matrix[i][j] = temp.getElmt(i, j);
+                }
+                // Membuat matrix identitas
+                for (int j = temp.col; j < inv.col; j++) {
+                    if (j == i + temp.col) {
+                        inv.matrix[i][j] = 1;
+                    }
+                    else {
+                        inv.matrix[i][j] = 0;
+                    }
+                }
+            }
+            SPL.CreateMatrixEselon(inv, temp.col);
+            inv.printMatrix();
+            SPL.CreateMatrixEselonReduced(inv, temp.col);
+            System.out.println("Invers matriks: ");
+            Matrix res = new Matrix(temp.row, temp.col);
+            for (int i = 0; i < temp.row; i++) {
+                for (int j = 0; j < temp.col; j++) {
+                    res.matrix[i][j] = inv.matrix[i][j + temp.col];
+                }
+            }
+            res.printMatrix();
+            System.out.print("Apakah anda ingin menyimpan file? (Y/N) ");
+            String confirm = input.next();
+            if (Objects.equals(confirm, "Y") || Objects.equals(confirm, "y")) {
+                Utils.matrixToFile(res);
+            }
+            else {
+                System.out.println("Proses menyimpan file dibatalkan.");
+            }
+        }
+
+    }
+
+
+
+    public static double[][] getCofactor(double[][] A, int given_row, int given_column)
     {
         int temp_row = 0, temp_column;
         int n = A.length;
@@ -30,7 +106,7 @@ public class Inverse
         return temp;
     }
     
-    static double determinant(double[][] A)
+    public static double determinant(double[][] A)
     {
         double D = 0;
     
@@ -51,7 +127,7 @@ public class Inverse
         return D;
     }
     
-    static void adjoint(double[][] A, double [][]adj)
+    public static void adjoint(double[][] A, double [][]adj)
     {
         int N = A.length;
         if (N == 1)
@@ -70,14 +146,14 @@ public class Inverse
         }
     }
 
-    static boolean inverse(double[][] A, double [][]inverse)
+    public static boolean inverse(double[][] A, double [][]inverse)
     {
         int N = A.length;
 
         double det = determinant(A);
         if (det == 0)
         {
-            System.out.print("Matrix tidak memiliki inverse/balikan");
+            System.out.println("Matrix tidak memiliki inverse/balikan");
             return false;
         }
 
@@ -91,7 +167,7 @@ public class Inverse
         return true;
     }
     
-    static void display(double[][] A)
+    public static void display(double[][] A)
     {
         int N = A.length;
         for (double[] doubles : A) {
@@ -101,7 +177,7 @@ public class Inverse
         }
     }
 
-    static void inverseGaussJordan(Matrix matrix) {
+    public static void inverseGaussJordan(Matrix matrix) {
         double det = determinant(matrix.matrix);
         if (det == 0) {
             System.out.println("Matrix tidak memiliki invers.");
