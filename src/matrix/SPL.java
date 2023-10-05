@@ -1,5 +1,7 @@
 package matrix;
 
+import Utils.Utils;
+
 import java.lang.*;
 import java.lang.reflect.Array;
 import java.util.*;
@@ -233,7 +235,7 @@ public class SPL {
         }
     }
 
-    public static void parametricSol(Matrix matrix) {
+    public static void parametricSol(Matrix matrix, Matrix awal) {
         Double[] arrayHasil = new Double[matrix.row];
         String[] stringHasil = new String[matrix.row];
         // Inisialisasi arrayHasil dengan NaN dan stringHasil dengan ""
@@ -336,42 +338,56 @@ public class SPL {
                 stringHasil[i] = "t" + param;
             }
         }
+        String[] s = new String[1];
         System.out.println("Solusi akhir: ");
+        s[0] = ("Solusi akhir:\n ");
+
         for (int k = 0; k < stringHasil.length; k++) {
             System.out.printf("X%d = %s\n", k + 1, stringHasil[k]);
+            s[0] += String.format("X%d = %s\n", k + 1, stringHasil[k]);
         }
+        savetofile(awal, s);
     }
 
-    public static void solveSPLEchelon(Matrix matrix, int colTambahan) {
+    public static void solveSPLEchelon(Matrix matrix, Matrix awal, int colTambahan) {
         // Solve SPL khusus Gauss
+        String[] s = new String[1];
         if (checkSolveType(matrix, colTambahan) == -1) {
             System.out.println("Tidak ada penyelesaian untuk matriks ini.");
         } else if (checkSolveType(matrix, colTambahan) == 1) {
-            parametricSol(matrix);
+            parametricSol(matrix, awal);
         } else {
             Matrix solution = new Matrix(1, matrix.col);
             recursionSolve(matrix, solution, matrix.row - 1);
             for (int i = 0; i < matrix.row; i++) {
                 if (!Double.isFinite(solution.matrix[0][i])) {
                     System.out.println("Tidak ada solusi untuk persamaan ini.");
+                    s[0] = "Tidak ada solusi untuk persamaan ini.\n";
                     return;
                 }
             }
             System.out.println("Solusi persamaan adalah:");
+            s[0] = "Solusi persamaan adalah:\n";
             for (int i = 0; i < matrix.row; i++) {
                 System.out.printf("X%d = %f\n", i, solution.matrix[0][i]);
+                s[0] += String.format("X%d = %f\n", i, solution.matrix[0][i]);
             }
+            savetofile(awal, s);
         }
     }
 
-    public static void solveSPLReduced(Matrix matrix) {
+    public static void solveSPLReduced(Matrix matrix, Matrix awal) {
         // Prekondisi : Matriks sudah dalam bentuk matriks eselon tereduksi (Gauss
         // Jordan)
         // Hanya untuk yang unique value
+        String s[] = new String[1];
         System.out.println("Nilai setiap variabel adalah: ");
+        s[0] = "Nilai setiap variabel adalah: \n";
         for (int i = 0; i < matrix.row; i++) {
             System.out.printf("X%d = %f\n", i + 1, matrix.getElmt(i, matrix.col - 1));
+            s[0] += String.format("X%d = %f\n", i + 1, matrix.getElmt(i, matrix.col - 1));
         }
+        savetofile(awal, s);
     }
 
     public static void recursionSolve(Matrix matrix, Matrix solution, int row) {
@@ -410,9 +426,10 @@ public class SPL {
 
     }
 
-    public static void CramerSolver(Matrix m, String[] s) {
+    public static void CramerSolver(Matrix m, Matrix awal, String[] s) {
         s[1] = "";
         Matrix m1 = getAnsOnly(m);
+        String[] res  = new String[1];
 
         if (Determinan.detReduksi(m) != 0) {
             double detawal = Determinan.detReduksi(m);// sebagai pembagi
@@ -427,13 +444,19 @@ public class SPL {
                 if (i == 0) {
                     System.out.println("Solusi persamaan adalah:");
                     s[0] = "Solusi persamaan adalah: ";
+                    res[0] = "Solusi persamaan adalah: ";
                     System.out.printf("x%d = %.4f\n", i + 1, solusi);
+                    res[0] += String.format("x%d = %.4f\n", i + 1, solusi);
                 } else if (i == m.col - 2) {
                     System.out.printf("x%d = %.4f", i + 1, solusi);
+                    res[0] += String.format("x%d = %.4f\n", i + 1, solusi);
                 } else {
                     System.out.printf("x%d = %.4f\n", i + 1, solusi);
+                    res[0] = String.format("x%d = %.4f\n", i + 1, solusi);
                 }
                 s[i + 1] = String.format("x%d = %.4f", i + 1, solusi);
+                res[0] = String.format("x%d = %.4f\n", i + 1, solusi);
+                savetofile(awal, res);
             }
 
         }
@@ -443,6 +466,16 @@ public class SPL {
         {
             System.out.println("Determinan == 0, maka solusi dari SPL di atas tidak unik, gunakan metode lain.");
         }
+    }
+
+    public static void savetofile(Matrix mAwal, String[] s) {
+        String[] str = new String[1];
+        str[0] = "Masukkan: \n";
+        for (int i = 0; i < mAwal.row; i++) {
+            str[0] += Arrays.toString(mAwal.matrix[i]) + "\n";
+        }
+        str[0] += s[0];
+        Utils.solutionToFile(str);
     }
 
 

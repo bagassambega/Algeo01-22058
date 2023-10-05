@@ -33,12 +33,17 @@ public class SPLApp {
             }
         }
         Matrix matriks = Utils.InputMatrix("1");
-        
+        Matrix forFile = new Matrix(matriks.row, matriks.col);
+        for (int i = 0; i < matriks.row; i++) {
+            for (int j = 0; j < matriks.col; j++) {
+                forFile.matrix[i][j] = matriks.matrix[i][j];
+            }
+        }
         switch (SPLchoicenum) {
             case "1" :
                 SPL.CreateMatrixEselon(matriks, 1);
                 Utils.rounding(matriks);
-                SPL.solveSPLEchelon(matriks, 1);
+                SPL.solveSPLEchelon(matriks, forFile, 1);
                 break;
 
             case "2" :
@@ -47,15 +52,15 @@ public class SPLApp {
                 if (SPL.checkSolveType(matriks, 1) == -1) {
                     System.out.println("Tidak ada solusi yang memenuhi.");
                 } else if (SPL.checkSolveType(matriks, 1) == 1) {
-                    SPL.parametricSol(matriks);
+                    SPL.parametricSol(matriks, forFile);
                 } else {
                     SPL.CreateMatrixEselonReduced(matriks, 1);
                     if (SPL.checkSolveType(matriks, 1) == -1) {
                         System.out.println("Tidak ada solusi yang memenuhi.");
                     } else if (SPL.checkSolveType(matriks, 1) == 1) {
-                        SPL.parametricSol(matriks);
+                        SPL.parametricSol(matriks, forFile);
                     } else {
-                        SPL.solveSPLReduced(matriks);
+                        SPL.solveSPLReduced(matriks, forFile);
                     }
                 }
                 break;
@@ -79,17 +84,20 @@ public class SPLApp {
                 for (int i = 0; i < matriks.row; i++) {
                     reseq.matrix[i][0] = matriks.matrix[i][matriks.col - 1];
                 }
+                String[] s = new String[1];
                 Matrix res = new Matrix(matriks.row, 1);
                 res = res.multiplyMatrix(adj, reseq);
                 System.out.println("Solusi persamaan: ");
+                s[0] = "Solusi persamaan: \n";
                 for (int i = 0; i < res.row; i++) {
                     System.out.printf("X%d = %f\n", i+1, res.matrix[i][0]);
+                    s[0] += String.format("X%d = %f\n", i+1, res.matrix[i][0]);
                 }
                 break;
             default :
-                String[] s = new String[matriks.row + 1];
-                SPL.CramerSolver(matriks, s);
-                Utils.solutionToFile(s);
+                String[] result = new String[matriks.row + 1];
+                SPL.CramerSolver(matriks, forFile, result);
+                Utils.solutionToFile(result);
                 break;
         }
     }

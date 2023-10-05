@@ -63,7 +63,7 @@ public class DeterminanApp {
                 try {
                     System.out.print("Masukkan path file (relatif terhadap folder test) : ");
                     filePath = input.nextLine();
-                    filePath = "../test/" + filePath;
+                    filePath = "../test/input/" + filePath;
                     File file = new File(filePath);
     
                     if (!file.exists() || !file.isFile()) {

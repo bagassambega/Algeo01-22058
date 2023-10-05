@@ -302,14 +302,15 @@ public class Utils {
 
             case "2":
                 if (Objects.equals(choice, "4") || Objects.equals(choice, "6")) {
-                    inputMatrixFile(choice);
+                    Matrix mat = inputMatrixFile(choice);
+                    return mat;
                 }
                 else {
                     // Masukan dari file
                     Scanner inputFilename = new Scanner(System.in);
                     System.out.print("Masukkan path file (relatif terhadap folder test): ");
                     String filePath = inputFilename.nextLine();
-                    filePath = "../test/" + filePath;
+                    filePath = "../test/input/" + filePath;
                     Matrix matFile = new Matrix(Utils.getRowFile(filePath),
                             Utils.getColFile(filePath, Utils.getRowFile(filePath)));
                     matFile.readMatrixFile(filePath);
@@ -326,7 +327,7 @@ public class Utils {
         Scanner inputFilename = new Scanner(System.in);
         System.out.print("Masukkan path file (relatif terhadap folder test): ");
         String filePath = inputFilename.nextLine();
-        filePath = "../test/" + filePath;
+        filePath = "../test/input/" + filePath;
         int row, col;
 
         Matrix matFile = new Matrix(Utils.getRowFile(filePath),

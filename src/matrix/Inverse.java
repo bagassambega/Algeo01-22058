@@ -55,7 +55,6 @@ public class Inverse
                 }
             }
             SPL.CreateMatrixEselon(inv, temp.col);
-            inv.printMatrix();
             SPL.CreateMatrixEselonReduced(inv, temp.col);
             System.out.println("Invers matriks: ");
             Matrix res = new Matrix(temp.row, temp.col);

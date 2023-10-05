@@ -2,6 +2,8 @@ package Aplikasi;
 import Utils.Utils;
 import matrix.Matrix;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class BicubicSpline{
@@ -13,26 +15,39 @@ public class BicubicSpline{
         double[] constant_array = new double[16];
         Matrix variable_array = new Matrix (14, 14);
         inversed.matrix = InverseOfMatrix(matrixX(matrix.matrix), 16);
-
-        System.out.println("Masukkan matriks berisi konstanta (4x4): ");
-        int idx = 0;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                constant_matrix.matrix[i][j] = input.nextDouble();
-                constant_array[idx] = constant_matrix.matrix[i][j];
-                idx++;
+        System.out.print("Masukkan melalui input manual (1) atau file (2)? : ");
+        int choice;
+        do {
+            choice = Utils.inputInt();
+        } while (choice < 1 || choice > 2);
+        if (choice == 1) {
+            System.out.println("Masukkan matriks berisi konstanta (4x4): ");
+            int idx = 0;
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    constant_matrix.matrix[i][j] = input.nextDouble();
+                    constant_array[idx] = constant_matrix.matrix[i][j];
+                    idx++;
+                }
             }
-        }
 
-        double hasil;
-        variable_array.matrix = inverseSPLBicubicSpline(inversed.matrix, constant_array);
-        double a, b;
-        System.out.print("Masukkan nilai A: ");
-        a = Utils.inputDouble();
-        System.out.print("Masukkan nilai B: ");
-        b = Utils.inputDouble();
-        hasil = BicubicSplineEquation(matrixX(matrix.matrix), variable_array.matrix, a, b);
-        System.out.printf("Hasil f(%f, %f) = %.6f", a, b, hasil);
+            double hasil;
+            variable_array.matrix = inverseSPLBicubicSpline(inversed.matrix, constant_array);
+            double a, b;
+            System.out.print("Masukkan nilai A: ");
+            a = Utils.inputDouble();
+            System.out.print("Masukkan nilai B: ");
+            b = Utils.inputDouble();
+            hasil = BicubicSplineEquation(matrixX(matrix.matrix), variable_array.matrix, a, b);
+            System.out.printf("Hasil f(%f, %f) = %.6f", a, b, hasil);
+        }
+        else {
+            Matrix data = new Matrix(0, 0);
+            Matrix fx = new Matrix(0, 0);
+            inputFile(data, fx);
+            data.printMatrix();
+            fx.printMatrix();
+        }
     }
     
     public static double BicubicSplineEquation(double[][] mtrx, double[][] variables, double a, double b){
@@ -48,7 +63,6 @@ public class BicubicSpline{
     public static double[][] InverseOfMatrix(double[][] matrix, int order)
     {
         double temp;
-
         for (int i = 0; i < order; i++) {
             for (int j = 0; j < 2 * order; j++) {
                 if (j == (i + order))
@@ -219,5 +233,67 @@ public class BicubicSpline{
         }
 
         return variable;
+    }
+
+    public static void inputFile(Matrix titik, Matrix ans) {
+        String fileName = "";
+        Scanner input = new Scanner(System.in);
+        int row = 0;
+        int col = 0;
+        boolean validFilePath = false;
+        while (!validFilePath) {
+            try {
+                System.out.print("Masukkan nama file (relatif terhadap test/input): ");
+                fileName = input.nextLine();
+                File file = new File("../test/input/" + fileName);
+
+                Scanner fReader = new Scanner(file);
+                validFilePath = true;
+                while (fReader.hasNextLine()) {
+                    String s = fReader.nextLine();
+                    String[] temp = s.split(" ", 0);
+                    row += 1;
+                    if (col == 0) {
+                        col = temp.length;
+                    }
+                }
+                fReader.close();
+
+            } catch (FileNotFoundException e) {
+                System.out.println("File tidak ditemukan.");
+            }
+        }
+        titik.row = row - 1;
+        titik.col = col;
+        titik.matrix = new double[titik.row][titik.col];
+        try {
+            File file = new File("../test/input/" + fileName);
+            Scanner fReader = new Scanner(file);
+            int i = 0;
+            while (i <= titik.row - 1) {
+                {
+                    String s = fReader.nextLine();
+                    String[] temp = s.split(" ", 0);
+                    for (int j = 0; j <= col - 1; j++) {
+                        titik.matrix[i][j] = Utils.toDouble(temp[j]);
+                    }
+                }
+                i++;
+            }
+            ans.row = 1;
+            ans.col = col - 1;
+            ans.matrix = new double[1][ans.col];
+            i = 0;
+            String s = fReader.nextLine();
+            System.out.println(col);
+            String[] temp = s.split(" ", 0);
+            for (int j = 0; j <= col - 2; j++) {
+                ans.matrix[0][j] = Utils.toDouble(temp[j]);
+            }
+            fReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 }

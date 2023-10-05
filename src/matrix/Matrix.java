@@ -61,7 +61,7 @@ public class Matrix {
                             System.out.print("Masukkan path file (relatif ke folder test): ");
                             Scanner path = new Scanner(System.in);
                             String filepath = path.nextLine();
-                            readMatrixFile("../test/" + filepath);
+                            readMatrixFile(".../test/input/" + filepath);
                         }
 
                 }
@@ -74,7 +74,7 @@ public class Matrix {
             System.out.print("Masukkan path file (relatif ke folder test): ");
             Scanner path = new Scanner(System.in);
             String filepath = path.nextLine();
-            readMatrixFile("../test/" + filepath);
+            readMatrixFile(".../test/input/" + filepath);
         }
     }
 

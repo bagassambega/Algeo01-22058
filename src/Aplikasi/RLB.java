@@ -18,9 +18,9 @@ public class RLB {
         boolean validFilePath = false;
         while (!validFilePath) {
             try {
-                System.out.print("Masukkan nama file: ");
+                System.out.print("Masukkan nama file (relatif terhadap test/input): ");
                 fileName = input.nextLine();
-                File file = new File("../test/" + fileName);
+                File file = new File("../test/input/" + fileName);
                 
                 Scanner fReader = new Scanner(file);
                 validFilePath = true;
@@ -42,7 +42,7 @@ public class RLB {
         titik.col = col;
         titik.matrix = new double[titik.row][titik.col];
         try {
-            File file = new File("../test/" + fileName);
+            File file = new File("../test/input/" + fileName);
             Scanner fReader = new Scanner(file);
             int i = 0;
             while (i <= titik.row - 1) {
