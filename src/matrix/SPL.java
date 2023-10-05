@@ -470,7 +470,7 @@ public class SPL {
 
     public static void savetofile(Matrix mAwal, String[] s) {
         String[] str = new String[1];
-        str[0] = "Masukkan: \n";
+        str[0] = "Masukan: \n";
         for (int i = 0; i < mAwal.row; i++) {
             str[0] += Arrays.toString(mAwal.matrix[i]) + "\n";
         }
